@@ -50,13 +50,13 @@ public class Deck {
    * Default constructor. Build the deck of cards.
    */
   public Deck() {
-    mCards = buildDeck();
+    mCards = Deck.buildDeck();
   }
 
   /**
    * Build a fresh deck of cards.
    */
-  public List<Card> buildDeck() {
+  public static List<Card> buildDeck() {
     List<Card> deck = new ArrayList<>(52);
 
     SUITS.forEach((suitKey, suitValue) -> {
