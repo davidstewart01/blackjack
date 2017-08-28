@@ -1,3 +1,6 @@
+/.idea
+/.gradle
+/build
 Blackjack.iml
-/out
-.idea
+Blackjack.ipr
+Blackjack.iws
