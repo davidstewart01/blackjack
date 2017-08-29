@@ -1,10 +1,5 @@
 package player;
 
-import card.Card;
-
-import java.util.ArrayList;
-import java.util.List;
-
 /**
  *  Class that represents a player.
  *
@@ -12,128 +7,95 @@ import java.util.List;
  */
 public class Player {
 
-  //--------------------------------------------
-  // property: hand
-  //--------------------------------------------
-  private List<Card> mHand = new ArrayList<>();
+  //---------------------------------------------------------------------
+  // ENUMS
+  //---------------------------------------------------------------------
 
   /**
-   * @param pHand
-   *   The player's hand of cards.
+   * All of the types of player that can join game.
    */
-  public void setHand(List<Card> pHand) {
-    mHand = pHand;
+  public enum Type {
+    DEALER, PLAYER
   }
 
-  /**
-   * @return
-   *   The player's hand of cards.
-   */
-  public List<Card> getHand() {
-    return mHand;
-  }
-
-  //--------------------------------------------
-  // property: hand
-  //--------------------------------------------
-  private boolean mBust = false;
+  //---------------------------------------------------------------------
+  // CONSTRUCTORS
+  //---------------------------------------------------------------------
 
   /**
-   * @param pBust
-   *   Flag determining whether the player is bust or not.
-   */
-  public void setBust(boolean pBust) {
-    mBust = pBust;
-  }
-
-  /**
-   * @return
-   *   Flag determining whether the player is bust or not.
-   */
-  public boolean isBust() {
-    return  mBust;
-  }
-
-  //--------------------------------------------
-  // property: sticking
-  //--------------------------------------------
-  private boolean mSticking = false;
-
-  /**
-   * @param pSticking
-   *   Flag determining whether the player is sticking or not.
-   */
-  public void setSticking(boolean pSticking) {
-    mSticking = pSticking;
-  }
-
-  /**
-   * @return
-   *   Flag determining whether the player is sticking or not.
-   */
-  public boolean isSticking() {
-    return mSticking;
-  }
-
-  /**
-   * Initialise the player instance.
+   * Default Constructor.
    */
   public Player() {
   }
 
   /**
-   * Append the given card to the player 's hand. After
-   * the card has been appended, this method will
-   * determine whether or not the player is bust.
+   * Constructor that sets the username of this player. It will
+   * also set the player type to Type.PLAYER.
    *
-   * @param pCard
-   *   The card to be appended to the hand.
+   * @param pUserName
+   *   The username to set for the player.
    */
-  public void hit(Card pCard) {
-    getHand().add(pCard);
+  public Player(String pUserName) {
+    setUserName(pUserName);
+  }
 
-    if (getCardTotal() > 21) {
-      setBust(true);
-    }
+  /**
+   * Constructor that sets the username and type of this player.
+   *
+   * @param pUserName
+   *   The username to set for the player.
+   * @param pPlayerType
+   *   The type of player.
+   */
+  public Player(String pUserName, Type pPlayerType) {
+    setUserName(pUserName);
+    setPlayerType(pPlayerType);
+  }
+
+  //---------------------------------------------------------------------
+  // PROPERTIES
+  //---------------------------------------------------------------------
+
+  //------------------------
+  // property: userName
+  //------------------------
+  private String mUserName = "";
+
+  /**
+   * @param pUserName
+   *   The player's username.
+   */
+  public void setUserName(String pUserName) {
+    mUserName = pUserName;
   }
 
   /**
    * @return
-   *   The running total value of all player 's cards in hand.
+   *   The player's username.
    */
-  public int getCardTotal() {
-    int total = 0;
-    int numAces = 0;
+  public String getUserName() {
+    return mUserName;
+  }
 
-    for (Card card : getHand()) {
-      if (card.getRank().getValue() == 1) {
-        ++numAces;
-        continue;
-      }
+  //------------------------
+  // property: playerType
+  //------------------------
+  private Type mPlayerType = null;
 
-      total += card.getRank().getValue();
-    }
-
-    if (numAces > 0) {
-      for (int i = 0; i < numAces; i++) {
-        if ((total + 11) <= 21) {
-          total += 11;
-        }
-        else {
-          total += 1;
-        }
-      }
-    }
-
-    return total;
+  /**
+   * @param pPlayerType
+   *   The type of user playing.
+   */
+  public void setPlayerType(Type pPlayerType) {
+    mPlayerType = pPlayerType;
   }
 
   /**
    * @return
-   *   Retrieve the number of cards in the player's hand.
+   *   The type of user playing.
    */
-  public int getNumberOfCardsInHand() {
-    return getHand().size();
+  public Type getPlayerType() {
+    return mPlayerType;
   }
 
 }

@@ -1,7 +1,8 @@
 package game;
 
 import card.Deck;
-import player.Player;
+import player.BlackjackDealer;
+import player.BlackjackPlayer;
 
 import java.util.Scanner;
 
@@ -12,8 +13,8 @@ import java.util.Scanner;
  */
 public class Blackjack {
 
-  Player dealer = new Player();
-  Player player1 = new Player();
+  BlackjackDealer dealer = new BlackjackDealer();
+  BlackjackPlayer player1 = new BlackjackPlayer();
   Deck deck = new Deck();
 
   public Blackjack() {
@@ -156,7 +157,7 @@ public class Blackjack {
    * @param pPlayer
    *   The player whose cards will be shown.
    */
-  public void showPlayerHand(Player pPlayer) {
+  public void showPlayerHand(BlackjackPlayer pPlayer) {
      pPlayer.getHand().forEach(System.out::println);
   }
 
