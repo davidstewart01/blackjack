@@ -18,31 +18,13 @@ public class CardTest {
   }
 
   /**
-   * When a card's rank is 10, jack, queen or king, the number
-   * of the card will be 10.
-   */
-  /*@Test
-  public void whenValueIsGreaterThan9_10isTheValueOfTheCard() {
-    Card card = null;
-
-    for (int i = 10; i <= 13; i++) {
-      card = new Card("s", i);
-      assertEquals(10, card.getValue());
-    }
-  }*/
-
-  /**
    * When a card's rank is 9 or less, the number of the card
    * is a correct value.
    */
-  /*@Test
-  public void whenValueIs9orLess_cardFaceValueIsReturned() {
-    Card card = null;
-
-    for (int i = 1; i <= 9; i++) {
-      card = new Card("s", i);
-      assertEquals(i, card.getValue());
-    }
-  }*/
+  @Test
+  public void whenGetValueIsInvoked_theCorrectValueIsReturned() {
+    Card card = new Card(Card.Suit.DIAMONDS, Card.Rank.KING);
+    assertEquals(10, card.getValue());
+  }
 
 }

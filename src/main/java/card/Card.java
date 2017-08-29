@@ -17,28 +17,58 @@ public class Card {
   public enum Rank {
     ACE("Ace", 1), TWO("Two", 2), THREE("Three", 3), FOUR("Four", 4), FIVE("Five", 5), SIX("Six", 6), SEVEN("Seven", 7),
     EIGHT("Eight", 8), NINE("Nine", 9), TEN("Ten", 10), JACK("Jack", 10), QUEEN("Queen", 10), KING("King", 10);
-    
+
+    /**
+     * Rank constructor.
+     *
+     * @param pName
+     *   The rank name e.g. Ace, Two, Jack etc.
+     * @param pValue
+     *   The rank value. This is basically what the card is worth i.e. 1 - 11.
+     */
     Rank(String pName, int pValue) {
       setName(pName);
       setValue(pValue);
     }
-    
+
+    //-------------------------
+    // property: name
+    //-------------------------
     private String mName = "";
-    
+
+    /**
+     * @param pName
+     *   The rank name e.g. Ace, Two, Jack etc.
+     */
     public void setName(String pName) {
       mName = pName;
     }
-    
+
+    /**
+     * @return
+     *   The rank name e.g. Ace, Two, Jack etc.
+     */
     public String getName() {
       return mName;
     }
-    
+
+    //-------------------------
+    // property: value
+    //-------------------------
     private int mValue = 0;
-    
+
+    /**
+     * @param pValue
+     *   The rank value. This is basically what the card is worth i.e. 1 - 11..
+     */
     public void setValue(int pValue) {
       mValue = pValue;
     }
-    
+
+    /**
+     * @return
+     *   The rank value. This is basically what the card is worth i.e. 1 - 11.
+     */
     public int getValue() {
       return mValue;
     }
@@ -49,17 +79,34 @@ public class Card {
    */
   public enum Suit {
     HEARTS("Hearts"), DIAMONDS("Diamonds"), CLUBS("Clubs"), SPADES("Spades");
-    
+
+    /**
+     * Suit constructor.
+     *
+     * @param pName
+     *   The name of card suit.
+     */
     Suit(String pName) {
       setName(pName);
     }
-    
+
+    //-------------------------
+    // property: name
+    //-------------------------
     private String mName = "";
-    
+
+    /**
+     * @param pName
+     *   The name of card suit.
+     */
     public void setName(String pName) {
       mName = pName;
     }
-    
+
+    /**
+     * @return
+     *   The name of card suit.
+     */
     public String getName() {
       return mName;
     }
@@ -140,12 +187,7 @@ public class Card {
    *   the rank of the card.
    */
   public int getValue() {
-    if (getRank().getValue() > 9) {
-      return 10;
-    }
-    else {
-      return getRank().getValue();
-    }
+    return getRank().getValue();
   }
 
   /**
