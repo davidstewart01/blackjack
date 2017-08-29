@@ -1,6 +1,10 @@
 package card;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Random;
 
 /**
  * Class that represents a single deck of cards.
@@ -12,13 +16,13 @@ public class Deck {
   //----------------------------------------
   // property: cards
   //----------------------------------------
-  private List<Card> mCards = new ArrayList<>();
+  private LinkedList<Card> mCards = new LinkedList<>();
 
   /**
    * @param pCards
    *   The cards in the deck.
    */
-  public void setCards(List<Card> pCards) {
+  public void setCards(LinkedList<Card> pCards) {
     mCards = pCards;
   }
 
@@ -26,7 +30,7 @@ public class Deck {
    * @return
    *   The cards in the deck.
    */
-  public List<Card> getCards() {
+  public LinkedList<Card> getCards() {
     return mCards;
   }
 
@@ -40,8 +44,8 @@ public class Deck {
   /**
    * Build a fresh deck of cards.
    */
-  public static List<Card> buildDeck() {
-    List<Card> deck = new ArrayList<>(52);
+  public static LinkedList<Card> buildDeck() {
+    LinkedList<Card> deck = new LinkedList<>();
   
     for (Card.Suit suit : Card.Suit.values()) {
       for (Card.Rank rank : Card.Rank.values()) {
