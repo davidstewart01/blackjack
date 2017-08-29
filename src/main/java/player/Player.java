@@ -106,12 +106,12 @@ public class Player {
     int numAces = 0;
 
     for (Card card : getHand()) {
-      if (card.getRank() == 1) {
+      if (card.getRank().getValue() == 1) {
         ++numAces;
         continue;
       }
 
-      total += card.getValue();
+      total += card.getRank().getValue();
     }
 
     if (numAces > 0) {

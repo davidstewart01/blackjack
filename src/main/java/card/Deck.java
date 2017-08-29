@@ -9,22 +9,6 @@ import java.util.*;
  */
 public class Deck {
 
-  public static Map<Integer, String> RANKS = new HashMap<>();
-  public static Map<String, String> SUITS = new HashMap<>();
-
-  static {
-    // Set ranks.
-    RANKS.put(1, "Ace"); RANKS.put(2, "Two"); RANKS.put(3, "Three");
-    RANKS.put(4, "Four"); RANKS.put(5, "Five"); RANKS.put(6, "Six");
-    RANKS.put(7, "Seven"); RANKS.put(8, "Eight"); RANKS.put(9, "Nine");
-    RANKS.put(10, "Ten"); RANKS.put(11, "Jack"); RANKS.put(12, "Queen");
-    RANKS.put(13, "King");
-
-    // Set suits.
-    SUITS.put("h", "Hearts"); SUITS.put("c", "Clubs");
-    SUITS.put("d", "Diamonds"); SUITS.put("s", "Spades");
-  }
-
   //----------------------------------------
   // property: cards
   //----------------------------------------
@@ -58,11 +42,12 @@ public class Deck {
    */
   public static List<Card> buildDeck() {
     List<Card> deck = new ArrayList<>(52);
-
-    SUITS.forEach((suitKey, suitValue) -> {
-      RANKS.forEach(
-        (rankKey, rankValue) -> deck.add(new Card(suitKey, rankKey)));
-    });
+  
+    for (Card.Suit suit : Card.Suit.values()) {
+      for (Card.Rank rank : Card.Rank.values()) {
+        deck.add(new Card(suit, rank));
+      }
+    }
 
     return deck;
   }

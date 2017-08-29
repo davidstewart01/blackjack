@@ -6,17 +6,79 @@ package card;
  * @author David Stewart
  */
 public class Card {
-
+  
+  //---------------------------------------------------------------------
+  // ENUMS
+  //---------------------------------------------------------------------
+  
+  /**
+   * The ranks that can be associated with a card.
+   */
+  public enum Rank {
+    ACE("Ace", 1), TWO("Two", 2), THREE("Three", 3), FOUR("Four", 4), FIVE("Five", 5), SIX("Six", 6), SEVEN("Seven", 7),
+    EIGHT("Eight", 8), NINE("Nine", 9), TEN("Ten", 10), JACK("Jack", 10), QUEEN("Queen", 10), KING("King", 10);
+    
+    Rank(String pName, int pValue) {
+      setName(pName);
+      setValue(pValue);
+    }
+    
+    private String mName = "";
+    
+    public void setName(String pName) {
+      mName = pName;
+    }
+    
+    public String getName() {
+      return mName;
+    }
+    
+    private int mValue = 0;
+    
+    public void setValue(int pValue) {
+      mValue = pValue;
+    }
+    
+    public int getValue() {
+      return mValue;
+    }
+  }
+  
+  /**
+   * The suits that can be associated with a card.
+   */
+  public enum Suit {
+    HEARTS("Hearts"), DIAMONDS("Diamonds"), CLUBS("Clubs"), SPADES("Spades");
+    
+    Suit(String pName) {
+      setName(pName);
+    }
+    
+    private String mName = "";
+    
+    public void setName(String pName) {
+      mName = pName;
+    }
+    
+    public String getName() {
+      return mName;
+    }
+  }
+  
+  //---------------------------------------------------------------------
+  // PROPERTIES
+  //---------------------------------------------------------------------
+  
   //--------------------------
   // property: rank
   //--------------------------
-  public int mRank = 0;
+  public Rank mRank = null;
 
   /**
    * @param pRank
    *   The rank of this card.
    */
-  public void setRank(int pRank) {
+  public void setRank(Rank pRank) {
     mRank = pRank;
   }
 
@@ -24,20 +86,20 @@ public class Card {
    * @return
    *   The rank of this card.
    */
-  public int getRank() {
+  public Rank getRank() {
     return mRank;
   }
 
   //--------------------------
   // property: suit
   //--------------------------
-  public String mSuit = null;
+  public Suit mSuit = null;
 
   /**
    * @param pSuit
    *   The suit of this card.
    */
-  public void setSuit(String pSuit) {
+  public void setSuit(Suit pSuit) {
     mSuit = pSuit;
   }
 
@@ -45,10 +107,14 @@ public class Card {
    * @return
    *   The suit of this card.
    */
-  public String getSuit() {
+  public Suit getSuit() {
     return mSuit;
   }
-
+  
+  //---------------------------------------------------------------------
+  // CONSTRUCTORS
+  //---------------------------------------------------------------------
+  
   /**
    * Initialise the card.
    *
@@ -57,11 +123,15 @@ public class Card {
    *@param pRank:
    *  This is the card's rank i.e. 1, 2, 3, 4 etc.
    */
-  public Card(String pSuit, int pRank) {
+  public Card(Suit pSuit, Rank pRank) {
     setRank(pRank);
     setSuit(pSuit);
   }
-
+  
+  //---------------------------------------------------------------------
+  // METHODS
+  //---------------------------------------------------------------------
+  
   /**
    * Determine the blackjack value of the card.
    *
@@ -70,11 +140,11 @@ public class Card {
    *   the rank of the card.
    */
   public int getValue() {
-    if (getRank() > 9) {
+    if (getRank().getValue() > 9) {
       return 10;
     }
     else {
-      return getRank();
+      return getRank().getValue();
     }
   }
 
@@ -83,7 +153,7 @@ public class Card {
    *   A string representation of the card.
    */
   public String toString() {
-    return Deck.RANKS.get(getRank()) + " of " + Deck.SUITS.get(getSuit());
+    return getRank().getName() + " of " + getSuit().getName();
   }
 
 }
