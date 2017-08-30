@@ -50,6 +50,7 @@ public class Player {
   public Player(String pUserName, Type pPlayerType) {
     setUserName(pUserName);
     setPlayerType(pPlayerType);
+
   }
 
   //---------------------------------------------------------------------

@@ -19,7 +19,6 @@ public class DeckTest {
   @Test
   public void whenDeckIsBuilt_all52cardsAreCorrect() {
     Deck deck = new Deck();
-    List<Card> cards = deck.getCards();
 
     List<String> cardNames = new ArrayList<>(52);
     cardNames.add("Ace of Hearts");
@@ -78,9 +77,9 @@ public class DeckTest {
     cardNames.add("Queen of Spades");
     cardNames.add("King of Spades");
 
-    assertEquals(52, cards.size());
+    assertEquals(52, deck.size());
 
-    cards.stream().forEach(card ->
+    deck.stream().forEach(card ->
       assertTrue(cardNames.contains(card.toString())));
   }
 

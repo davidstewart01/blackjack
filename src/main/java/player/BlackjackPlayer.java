@@ -14,6 +14,15 @@ import java.util.Random;
 public class BlackjackPlayer extends Player {
 
   //---------------------------------------------------------------------
+  // CONSTANTS
+  //---------------------------------------------------------------------
+
+  public static final int HAND_ONE = 0;
+  public static final int HAND_TWO = 1;
+  public static final int HAND_THREE = 2;
+  public static final int HAND_FOUR = 3;
+
+  //---------------------------------------------------------------------
   // CONSTRUCTORS
   //---------------------------------------------------------------------
 
@@ -28,6 +37,8 @@ public class BlackjackPlayer extends Player {
     Random random = new Random();
     super.setUserName("Player" + random.nextInt());
     super.setPlayerType(Type.PLAYER);
+    //initialise a blank hand for play
+    getHands().add(new Hand());
   }
 
   /**
@@ -60,45 +71,37 @@ public class BlackjackPlayer extends Player {
   //---------------------------------------------------------------------
 
   //--------------------------------------------
-  // property: hand
+  // property: hands
   //--------------------------------------------
-  private List<Card> mHand = new ArrayList<>();
+  private List<Hand> mHands = new ArrayList<>(4);
 
   /**
-   * @param pHand
+   * @param pHands
    *   The player's hand of cards.
    */
-  public void setHand(List<Card> pHand) {
-    mHand = pHand;
+  public void setHands(List<Hand> pHands) {
+    mHands = pHands;
   }
 
   /**
    * @return
    *   The player's hand of cards.
    */
-  public List<Card> getHand() {
-    return mHand;
+  public List<Hand> getHands() {
+    return mHands;
   }
 
   //--------------------------------------------
-  // property: hand
+  // property: currentHandMarker
   //--------------------------------------------
-  private boolean mBust = false;
+  private int mCurrentHandMarker = HAND_ONE;
 
-  /**
-   * @param pBust
-   *   Flag determining whether the player is bust or not.
-   */
-  public void setBust(boolean pBust) {
-    mBust = pBust;
+  public int getCurrentHandMarker() {
+    return mCurrentHandMarker;
   }
 
-  /**
-   * @return
-   *   Flag determining whether the player is bust or not.
-   */
-  public boolean isBust() {
-    return  mBust;
+  public void setCurrentHandMarker(int pCurrentHandMarker) {
+    mCurrentHandMarker = pCurrentHandMarker;
   }
 
   //--------------------------------------------
@@ -135,10 +138,10 @@ public class BlackjackPlayer extends Player {
    *   The card to be appended to the hand.
    */
   public void hit(Card pCard) {
-    getHand().add(pCard);
+    getHands().get(0).add(pCard);
 
     if (getCardTotal() > 21) {
-      setBust(true);
+      getHands().get(0).setBust(true);
     }
   }
 
@@ -153,7 +156,8 @@ public class BlackjackPlayer extends Player {
     int total = 0;
     int numAces = 0;
 
-    for (Card card : getHand()) {
+    //TODO - tidy up for the hand being played, not just the first one
+    for (Card card : getHands().get(0)) {
       if (card.getRank().getValue() == 1) {
         ++numAces;
         continue;
@@ -174,14 +178,6 @@ public class BlackjackPlayer extends Player {
     }
 
     return total;
-  }
-
-  /**
-   * @return
-   *   Retrieve the number of cards in the player's hand.
-   */
-  public int getNumberOfCardsInHand() {
-    return getHand().size();
   }
 
 }

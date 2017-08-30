@@ -33,6 +33,27 @@ public class Hand extends LinkedList<Card> {
     mBet = pBet;
   }
 
+  //--------------------------------------------
+  // property: bust
+  //--------------------------------------------
+  private boolean mBust = false;
+
+  /**
+   * @param pBust
+   *   Flag determining whether the player is bust or not.
+   */
+  public void setBust(boolean pBust) {
+    mBust = pBust;
+  }
+
+  /**
+   * @return
+   *   Flag determining whether the player is bust or not.
+   */
+  public boolean isBust() {
+    return  mBust;
+  }
+
   //----------------------------------------
   // property: hasDoubledDown
   //----------------------------------------
@@ -64,7 +85,7 @@ public class Hand extends LinkedList<Card> {
    * when it has only 2 cards.
    */
   public void doubleDown(){
-    if(!hasDoubledDown() && numberOfCardsInHand() == 2){
+    if(!hasDoubledDown() && getNumberOfCardsInHand() == 2){
       setHasDoubledDown(true);
       setBet(getBet() * 2);
     }
@@ -75,7 +96,7 @@ public class Hand extends LinkedList<Card> {
    *   Whether or not the player can split the current hand
    */
   public boolean canSplitHand(){
-    if((numberOfCardsInHand() == 2) && (get(0).getValue() == get(1).getValue())){
+    if((getNumberOfCardsInHand() == 2) && (get(0).getValue() == get(1).getValue())){
       isSplittable = true;
     }
     return isSplittable;
@@ -97,7 +118,7 @@ public class Hand extends LinkedList<Card> {
    * @return
    *   The number of Cards in the current Hand.
    */
-  public int numberOfCardsInHand(){
+  public int getNumberOfCardsInHand(){
     return size();
   }
 

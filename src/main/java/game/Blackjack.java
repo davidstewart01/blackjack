@@ -19,11 +19,12 @@ public class Blackjack {
   
   public Blackjack() {
     deck.shuffleDeck(deck);
-    
-    player1.getHand().add(deck.removeLast());
-    dealer.getHand().add(deck.removeLast());
-    player1.getHand().add(deck.removeLast());
-    dealer.getHand().add(deck.removeLast());
+
+    //TODO fix this up to handle multiple hands more cleanly
+    player1.getHands().get(0).add(deck.removeLast());
+    dealer.getHands().get(0).add(deck.removeLast());
+    player1.getHands().get(0).add(deck.removeLast());
+    dealer.getHands().get(0).add(deck.removeLast());
   }
 
   /**
@@ -46,11 +47,12 @@ public class Blackjack {
 
     while (!isGameFinished) {
 
+      //TODO - tidy up for the hand being played, not just the first one
       if (!dealersTurn) {
-        if (!player1.isSticking() && !player1.isBust()) {
+        if (!player1.isSticking() && !player1.getHands().get(0).isBust()) {
           System.out.println("");
           System.out.println("========");
-          System.out.println("Dealer's card: " + dealer.getHand().get(0));
+          System.out.println("Dealer's card: " + dealer.getHands().get(0));
           System.out.println("========");
           System.out.println("");
 
@@ -67,12 +69,12 @@ public class Blackjack {
             System.exit(1);
           }
         }
-        if (!dealer.isSticking() || !dealer.isBust()) {
+        if (!dealer.isSticking() || !dealer.getHands().get(0).isBust()) {
           dealersTurn = true;
         }
       }
       else {
-        if (!dealer.isSticking() && !dealer.isBust()) {
+        if (!dealer.isSticking() && !dealer.getHands().get(0).isBust()) {
           if (dealer.getCardTotal() < 17) {
             dealer.hit(deck.removeLast());
           }
@@ -81,12 +83,12 @@ public class Blackjack {
           }
         }
 
-        if (!player1.isSticking() || !player1.isBust()) {
+        if (!player1.isSticking() || !player1.getHands().get(0).isBust()) {
           dealersTurn = false;
         }
 
-        if ((dealer.isSticking() || dealer.isBust())
-            && (player1.isSticking() || player1.isBust())) {
+        if ((dealer.isSticking() || dealer.getHands().get(0).isBust())
+            && (player1.isSticking() || player1.getHands().get(0).isBust())) {
 
           isGameFinished = true;
         }
@@ -121,13 +123,13 @@ public class Blackjack {
     showPlayerHand(player1);
     System.out.println("");
 
-    if (dealer.isBust() && !player1.isBust()) {
+    if (dealer.getHands().get(0).isBust() && !player1.getHands().get(0).isBust()) {
       System.out.println("PLAYER1 WINS!");
     }
-    else if (player1.isBust() && !dealer.isBust()) {
+    else if (player1.getHands().get(0).isBust() && !dealer.getHands().get(0).isBust()) {
       System.out.println("DEALER WINS!");
     }
-    else if (dealer.isBust() && player1.isBust()) {
+    else if (dealer.getHands().get(0).isBust() && player1.getHands().get(0).isBust()) {
       System.out.println("BOTH PLAYERS BUST!");
     }
     else {
@@ -138,10 +140,10 @@ public class Blackjack {
         System.out.println("PLAYER1 WINS!");
       }
       else {
-        if (dealer.getNumberOfCardsInHand() > player1.getNumberOfCardsInHand()) {
+        if (dealer.getHands().get(0).getNumberOfCardsInHand() > player1.getHands().get(0).getNumberOfCardsInHand()) {
           System.out.println("DEALER WINS!");
         }
-        else if (player1.getNumberOfCardsInHand() > dealer.getNumberOfCardsInHand()) {
+        else if (player1.getHands().get(0).getNumberOfCardsInHand() > dealer.getHands().get(0).getNumberOfCardsInHand()) {
           System.out.println("PLAYER1 WINS!");
         }
         else {
@@ -158,7 +160,7 @@ public class Blackjack {
    *   The player whose cards will be shown.
    */
   public void showPlayerHand(BlackjackPlayer pPlayer) {
-     pPlayer.getHand().forEach(System.out::println);
+     pPlayer.getHands().get(0).forEach(System.out::println);
   }
 
   /**
