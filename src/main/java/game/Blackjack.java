@@ -16,11 +16,9 @@ public class Blackjack {
 
   BlackjackDealer dealer = new BlackjackDealer();
   BlackjackPlayer player1 = new BlackjackPlayer();
-  Shoe shoe = new Shoe();
+  Shoe shoe = new Shoe(1, true);
 
   public Blackjack() {
-    shoe.populateShoe(1, true);
-
     //TODO fix this up to handle multiple hands more cleanly
     player1.getHands().get(0).add(shoe.removeLast());
     dealer.getHands().get(0).add(shoe.removeLast());
@@ -69,10 +67,7 @@ public class Blackjack {
           else if (userChoice.equalsIgnoreCase("D")) {
             player1.getHands().get(0).doubleDown();
             player1.hit(shoe.removeLast());
-            //check if the card caused the player to bust
-            if(player1.getHands().get(0).isBust()){
-              isGameFinished = true;
-            }
+            isGameFinished = true;
           }
           else {
             System.exit(1);
