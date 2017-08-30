@@ -1,11 +1,10 @@
 package card;
 
-
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.Random;
+import java.util.stream.IntStream;
 
 /**
  * Class that represents a shoe of cards. This can be 1 - n decks.
@@ -87,14 +86,10 @@ public class Shoe extends LinkedList<Card> {
    *   The list of decks to be added to the shoe.
    */
   public void addDecksToShoe(List<Deck> pDecks, boolean pShuffle) {
-    for (Deck deck : pDecks) {
-      for (Card card : deck) {
-        add(card);
-      }
-    }
-    
+    pDecks.forEach(this::addAll);
     setNumberOfDecksInShoe(pDecks.size());
-    
+
+    System.out.println(getNumberOfDecksInShoe());
     if (pShuffle) {
       shuffle();
     }
@@ -108,10 +103,9 @@ public class Shoe extends LinkedList<Card> {
    */
   public void populateShoe(int pNumDecks, boolean pShuffle) {
     List<Deck> decks = new ArrayList<>(pNumDecks);
-    
-    for (int i = 0; i < pNumDecks; i++) {
-      decks.add(new Deck());
-    }
+
+    IntStream.rangeClosed(1, pNumDecks)
+      .forEach(number -> decks.add(new Deck()));
     
     addDecksToShoe(decks, pShuffle);
   }
