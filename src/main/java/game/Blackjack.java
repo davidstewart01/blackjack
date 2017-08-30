@@ -1,6 +1,7 @@
 package game;
 
 import card.Deck;
+import card.Shoe;
 import player.BlackjackDealer;
 import player.BlackjackPlayer;
 
@@ -15,16 +16,16 @@ public class Blackjack {
 
   BlackjackDealer dealer = new BlackjackDealer();
   BlackjackPlayer player1 = new BlackjackPlayer();
-  Deck deck = new Deck();
-  
+  Shoe shoe = new Shoe();
+
   public Blackjack() {
-    deck.shuffleDeck(deck);
+    shoe.populateShoe(1, true);
 
     //TODO fix this up to handle multiple hands more cleanly
-    player1.getHands().get(0).add(deck.removeLast());
-    dealer.getHands().get(0).add(deck.removeLast());
-    player1.getHands().get(0).add(deck.removeLast());
-    dealer.getHands().get(0).add(deck.removeLast());
+    player1.getHands().get(0).add(shoe.removeLast());
+    dealer.getHands().get(0).add(shoe.removeLast());
+    player1.getHands().get(0).add(shoe.removeLast());
+    dealer.getHands().get(0).add(shoe.removeLast());
   }
 
   /**
@@ -60,7 +61,7 @@ public class Blackjack {
           String userChoice = captureUserChoice();
 
           if (userChoice.equalsIgnoreCase("H")) {
-            player1.hit(deck.removeLast());
+            player1.hit(shoe.removeLast());
           }
           else if (userChoice.equalsIgnoreCase("S")) {
             player1.setSticking(true);
@@ -84,7 +85,7 @@ public class Blackjack {
       else {
         if (!dealer.isSticking() && !dealer.getHands().get(0).isBust()) {
           if (dealer.getCardTotal() < 17) {
-            dealer.hit(deck.removeLast());
+            dealer.hit(shoe.removeLast());
           }
           else {
             dealer.setSticking(true);

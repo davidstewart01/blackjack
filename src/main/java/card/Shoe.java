@@ -1,9 +1,11 @@
 package card;
 
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Random;
 
 /**
  * Class that represents a shoe of cards. This can be 1 - n decks.
@@ -33,8 +35,18 @@ public class Shoe extends LinkedList<Card> {
    * @param pDecks
    *   The decks to add to the shoe.
    */
-  public Shoe(List<Deck> pDecks) {
-    addDecksToShoe(pDecks);
+  public Shoe(List<Deck> pDecks, boolean pShuffle) {
+    addDecksToShoe(pDecks, pShuffle);
+  }
+  
+  /**
+   * This constructor will populate the shoe with the given number of decks.
+   *
+   * @param pNumberOfDecks
+   *   The number of decks to create and populate the shoe with.
+   */
+  public Shoe(int pNumberOfDecks, boolean pShuffle) {
+    populateShoe(pNumberOfDecks, pShuffle);
   }
   
   //---------------------------------------------------------------------
@@ -74,7 +86,7 @@ public class Shoe extends LinkedList<Card> {
    * @param pDecks
    *   The list of decks to be added to the shoe.
    */
-  public void addDecksToShoe(List<Deck> pDecks) {
+  public void addDecksToShoe(List<Deck> pDecks, boolean pShuffle) {
     for (Deck deck : pDecks) {
       for (Card card : deck) {
         add(card);
@@ -82,6 +94,32 @@ public class Shoe extends LinkedList<Card> {
     }
     
     setNumberOfDecksInShoe(pDecks.size());
+    
+    if (pShuffle) {
+      shuffle();
+    }
+  }
+  
+  /**
+   * Populate the shoe with the given number of decks.
+   *
+   * @param pNumDecks
+   *   The number of decks that will be created and added to the shoe.
+   */
+  public void populateShoe(int pNumDecks, boolean pShuffle) {
+    List<Deck> decks = new ArrayList<>(pNumDecks);
+    
+    for (int i = 0; i < pNumDecks; i++) {
+      decks.add(new Deck());
+    }
+    
+    addDecksToShoe(decks, pShuffle);
+  }
+  
+  /**
+   * Shuffle the shoe.
+   */
+  public void shuffle() {
     Collections.shuffle(this);
   }
   

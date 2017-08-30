@@ -2,7 +2,6 @@ package card;
 
 import java.util.Collections;
 import java.util.LinkedList;
-import java.util.List;
 import java.util.Random;
 
 /**
@@ -16,13 +15,13 @@ public class Deck extends LinkedList<Card> {
    * Default constructor. Build the deck of cards.
    */
   public Deck() {
-    buildDeck();
+    build();
   }
 
   /**
    * Build a fresh deck of cards.
    */
-  public void buildDeck() {
+  public void build() {
     for (Card.Suit suit : Card.Suit.values()) {
       for (Card.Rank rank : Card.Rank.values()) {
         add(new Card(suit, rank));
@@ -33,18 +32,15 @@ public class Deck extends LinkedList<Card> {
   /**
    * To ensure that the deck is sufficiently shuffled,
    * it will be randomly shuffled between 5 to 20 times.
-   *
-   * @param pDeck
-   *   The deck to be shuffled.
    */
-  public void shuffleDeck(List<Card> pDeck) {
+  public void shuffle() {
 
     // Set numShuffles to random number between 5 and 20.
     Random random = new Random();
     int numShuffles = random.nextInt(20 - 5) + 5;
 
     for (int i = 0; i < numShuffles; i++) {
-      Collections.shuffle(pDeck);
+      Collections.shuffle(this);
     }
   }
 }
