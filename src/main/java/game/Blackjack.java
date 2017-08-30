@@ -16,14 +16,14 @@ public class Blackjack {
   BlackjackDealer dealer = new BlackjackDealer();
   BlackjackPlayer player1 = new BlackjackPlayer();
   Deck deck = new Deck();
-
+  
   public Blackjack() {
-    deck.shuffleDeck(deck.getCards());
-
-    player1.getHand().add(deck.getCards().removeLast());
-    dealer.getHand().add(deck.getCards().removeLast());
-    player1.getHand().add(deck.getCards().removeLast());
-    dealer.getHand().add(deck.getCards().removeLast());
+    deck.shuffleDeck(deck);
+    
+    player1.getHand().add(deck.removeLast());
+    dealer.getHand().add(deck.removeLast());
+    player1.getHand().add(deck.removeLast());
+    dealer.getHand().add(deck.removeLast());
   }
 
   /**
@@ -58,7 +58,7 @@ public class Blackjack {
           String userChoice = captureUserChoice();
 
           if (userChoice.equalsIgnoreCase("H")) {
-            player1.hit(deck.getCards().removeLast());
+            player1.hit(deck.removeLast());
           }
           else if (userChoice.equalsIgnoreCase("S")) {
             player1.setSticking(true);
@@ -74,7 +74,7 @@ public class Blackjack {
       else {
         if (!dealer.isSticking() && !dealer.isBust()) {
           if (dealer.getCardTotal() < 17) {
-            dealer.hit(deck.getCards().removeLast());
+            dealer.hit(deck.removeLast());
           }
           else {
             dealer.setSticking(true);
