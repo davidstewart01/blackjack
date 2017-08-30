@@ -68,7 +68,7 @@ public class Blackjack {
           }
           else if (userChoice.equalsIgnoreCase("D")) {
             player1.getHands().get(0).doubleDown();
-            player1.hit(deck.removeLast());
+            player1.hit(shoe.removeLast());
             //check if the card caused the player to bust
             if(player1.getHands().get(0).isBust()){
               isGameFinished = true;
