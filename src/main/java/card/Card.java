@@ -6,17 +6,38 @@ package card;
  * @author David Stewart
  */
 public class Card {
-  
+
+  //---------------------------------------------------------------------
+  // CONSTANTS
+  //---------------------------------------------------------------------
+
+  public static final String ACE_CARD_NAME = "Ace";
+  public static final String TWO_CARD_NAME = "Two";
+  public static final String THREE_CARD_NAME = "Three";
+  public static final String FOUR_CARD_NAME = "Four";
+  public static final String FIVE_CARD_NAME = "Five";
+  public static final String SIX_CARD_NAME = "Six";
+  public static final String SEVEN_CARD_NAME = "Seven";
+  public static final String EIGHT_CARD_NAME = "Eight";
+  public static final String NINE_CARD_NAME = "Nine";
+  public static final String TEN_CARD_NAME = "Ten";
+  public static final String JACK_CARD_NAME = "Jack";
+  public static final String QUEEN_CARD_NAME = "Queen";
+  public static final String KING_CARD_NAME = "King";
+
   //---------------------------------------------------------------------
   // ENUMS
   //---------------------------------------------------------------------
-  
+
   /**
    * The ranks that can be associated with a card.
    */
   public enum Rank {
-    ACE("Ace", 1), TWO("Two", 2), THREE("Three", 3), FOUR("Four", 4), FIVE("Five", 5), SIX("Six", 6), SEVEN("Seven", 7),
-    EIGHT("Eight", 8), NINE("Nine", 9), TEN("Ten", 10), JACK("Jack", 10), QUEEN("Queen", 10), KING("King", 10);
+
+      ACE(ACE_CARD_NAME, 1), TWO(TWO_CARD_NAME, 2), THREE(THREE_CARD_NAME, 3), FOUR(FOUR_CARD_NAME, 4),
+      FIVE(FIVE_CARD_NAME, 5), SIX(SIX_CARD_NAME, 6), SEVEN(SEVEN_CARD_NAME, 7), EIGHT(EIGHT_CARD_NAME, 8),
+      NINE(NINE_CARD_NAME, 9), TEN(TEN_CARD_NAME, 10), JACK(JACK_CARD_NAME, 10), QUEEN(QUEEN_CARD_NAME, 10),
+      KING(KING_CARD_NAME, 10);
 
     /**
      * Rank constructor.
@@ -73,7 +94,7 @@ public class Card {
       return mValue;
     }
   }
-  
+
   /**
    * The suits that can be associated with a card.
    */
@@ -111,11 +132,11 @@ public class Card {
       return mName;
     }
   }
-  
+
   //---------------------------------------------------------------------
   // PROPERTIES
   //---------------------------------------------------------------------
-  
+
   //--------------------------
   // property: rank
   //--------------------------
@@ -157,11 +178,32 @@ public class Card {
   public Suit getSuit() {
     return mSuit;
   }
-  
+
+  //--------------------------
+  // property: id
+  //--------------------------
+  public String mId = null;
+
+  /**
+   * @param pId
+   *   The Id of this card. This should be the shorthand identifier for the card.
+   */
+  public void setId(String pId) {
+    mId = pId;
+  }
+
+  /**
+   * @return
+   *   The Id of this card. This should be the shorthand identifier for the card.
+   */
+  public String getId() {
+    return mId;
+  }
+
   //---------------------------------------------------------------------
   // CONSTRUCTORS
   //---------------------------------------------------------------------
-  
+
   /**
    * Initialise the card.
    *
@@ -173,12 +215,30 @@ public class Card {
   public Card(Suit pSuit, Rank pRank) {
     setRank(pRank);
     setSuit(pSuit);
+
+    // Set the shorthand id of the card.
+    switch (pRank.getName()) {
+      case ACE_CARD_NAME:
+        setId("a" + pSuit.getName().toLowerCase().substring(0, 1));
+        break;
+      case JACK_CARD_NAME:
+        setId("j" + pSuit.getName().toLowerCase().substring(0, 1));
+        break;
+      case QUEEN_CARD_NAME:
+        setId("q" + pSuit.getName().toLowerCase().substring(0, 1));
+        break;
+      case KING_CARD_NAME:
+        setId("k" + pSuit.getName().toLowerCase().substring(0, 1));
+        break;
+      default:
+        setId(Integer.toString(pRank.getValue()) + pSuit.getName().toLowerCase().substring(0, 1));
+    }
   }
-  
+
   //---------------------------------------------------------------------
   // METHODS
   //---------------------------------------------------------------------
-  
+
   /**
    * Determine the blackjack value of the card.
    *
