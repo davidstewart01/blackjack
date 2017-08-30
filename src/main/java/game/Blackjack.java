@@ -65,6 +65,14 @@ public class Blackjack {
           else if (userChoice.equalsIgnoreCase("S")) {
             player1.setSticking(true);
           }
+          else if (userChoice.equalsIgnoreCase("D")) {
+            player1.getHands().get(0).doubleDown();
+            player1.hit(deck.removeLast());
+            //check if the card caused the player to bust
+            if(player1.getHands().get(0).isBust()){
+              isGameFinished = true;
+            }
+          }
           else {
             System.exit(1);
           }
@@ -92,6 +100,7 @@ public class Blackjack {
 
           isGameFinished = true;
         }
+
       }
     }
 
@@ -172,14 +181,15 @@ public class Blackjack {
     String userInput = "";
 
     while (!isValidChoice) {
-      System.out.println("(H)it, (S)tick, or (Q)uit: ");
+      System.out.println("(H)it, (S)tick, (D)ouble Down or (Q)uit: ");
 
       Scanner scannerInput = new Scanner(System.in);
       userInput = scannerInput.nextLine();
 
       if (userInput.equalsIgnoreCase("H")
           || userInput.equalsIgnoreCase("S")
-          || userInput.equalsIgnoreCase("Q")) {
+          || userInput.equalsIgnoreCase("Q")
+          || userInput.equalsIgnoreCase("D")) {
 
         isValidChoice = true;
       }
