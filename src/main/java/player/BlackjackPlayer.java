@@ -150,9 +150,6 @@ public class BlackjackPlayer extends Player {
    *   The running total value of all player 's cards in hand.
    */
   public int getCardTotal() {
-
-    // TODO: Make the ace logic more solid. E.g. when a player has more than one ace.
-
     int total = 0;
     int numAces = 0;
 
@@ -166,15 +163,15 @@ public class BlackjackPlayer extends Player {
       total += card.getRank().getValue();
     }
 
+    // Switch ace values if necessary.
     if (numAces > 0) {
-      for (int i = 0; i < numAces; i++) {
-        if ((total + 11) <= 21) {
-          total += 11;
-        }
-        else {
-          total += 1;
-        }
-      }
+      
+      // Because only one ace in a hand can have a value of 11, check that one ace with a
+      // value of 11 plus the other aces with a value of one doesn't exceed 21. If it does
+      // exceed 21, all aces in the hand need to have a value of one.
+      
+      int acesTotal = 11 + (numAces - 1);
+      total += ((acesTotal + total) > 21) ? numAces : acesTotal;
     }
 
     return total;

@@ -3,7 +3,6 @@ package player;
 import card.Card;
 
 import java.util.LinkedList;
-import java.util.List;
 
 /**
  * Class that represents the hand of cards that a player can bet on.

@@ -1,6 +1,5 @@
 package game;
 
-import card.Deck;
 import card.Shoe;
 import player.BlackjackDealer;
 import player.BlackjackPlayer;
