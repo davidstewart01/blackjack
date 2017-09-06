@@ -53,7 +53,7 @@ public class BlackjackGUI extends JPanel {
       dealbutton.setText("  Deal");
       dealbutton.addActionListener(new dealbutton());
       hitbutton.setText("  Hit");
-      //hitbutton.addActionListener(new hitbutton());
+      hitbutton.addActionListener(new hitbutton());
       hitbutton.setEnabled(false);
       stickbutton.setText("  Stick");
       //stickbutton.addActionListener(new stickbutton());
@@ -111,7 +111,7 @@ public class BlackjackGUI extends JPanel {
         // card and puts them on the screen.
 
 
-        dealercard0 = new JLabel(new ImageIcon("../card/card_images/back.jpg"));
+        dealercard0 = new JLabel(new ImageIcon(this.getClass().getResource("../card/card_images/back.jpg")));
 
         //game.dealInitialCards();
 
@@ -181,17 +181,15 @@ public class BlackjackGUI extends JPanel {
      until hand value is over 21.
      @param e Hit button pressed
      *************************************************************/
-    /*class hitbutton implements ActionListener {
+    class hitbutton implements ActionListener {
       public void actionPerformed(ActionEvent e) {
-
-
-        Card hitcard = game.hit(player);
-        playercardhit = new JLabel(hitcard.getimage());
+        Card hitCard = game.shoe.removeLast();
+        game.player1.hit(hitCard);
+        playercardhit = new JLabel(hitCard.getCardImage());
         pcardPanel.add(playercardhit);
         pcardPanel.repaint();
 
-        if(game.bust(player))
-        {
+        if(game.player1.getHands().get(0).isBust()) {
           winlosebox.setText("Bust");
           hitbutton.setEnabled(false);
           dealbutton.setEnabled(false);
@@ -199,10 +197,9 @@ public class BlackjackGUI extends JPanel {
           playagainbutton.setEnabled(true);
         }
 
-        playerlabel.setText("  Player:   " + game.handValue(player));
-
+        playerlabel.setText("  Player:   " + game.player1.getCardTotal());
       }
-    }//end hitbutton */
+    }//end hitbutton
 
     /*************************************************************
      stickButton
