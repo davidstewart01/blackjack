@@ -60,6 +60,7 @@ public class Blackjack {
           System.out.println("");
           System.out.println("========");
           System.out.println("Dealer's card: " + dealer.getHands().get(0));
+          System.out.println("Dealer's total: " + dealer.getCardTotal());
           System.out.println("========");
           System.out.println("");
 
@@ -73,7 +74,7 @@ public class Blackjack {
             player1.setSticking(true);
           }
           else if (userChoice.equalsIgnoreCase("D")) {
-            player1.getHands().get(0).doubleDown();
+            player1.doubleDown(player1.getHands().get(0));
             player1.hit(shoe.removeLast());
             player1.setSticking(true);
           }
@@ -81,10 +82,15 @@ public class Blackjack {
             System.exit(1);
           }
         }
-        if (!dealer.isSticking() || !dealer.getHands().get(0).isBust()) {
+        //TODO - remove this when dealing multiple hands, TEST ONLY
+        if (player1.getHands().get(0).isBust()){
+          isGameFinished = true;
+        }
+        if ((!dealer.isSticking() || !dealer.getHands().get(0).isBust()) && player1.isSticking()) {
           dealersTurn = true;
         }
       }
+      // Dealers turns
       else {
         if (!dealer.isSticking() && !dealer.getHands().get(0).isBust()) {
           if (dealer.getCardTotal() < 17) {
@@ -93,10 +99,6 @@ public class Blackjack {
           else {
             dealer.setSticking(true);
           }
-        }
-
-        if (!player1.isSticking() || !player1.getHands().get(0).isBust()) {
-          dealersTurn = false;
         }
 
         if ((dealer.isSticking() || dealer.getHands().get(0).isBust())
@@ -181,6 +183,7 @@ public class Blackjack {
    */
   public void showPlayerHand(BlackjackPlayer pPlayer) {
      pPlayer.getHands().get(0).forEach(System.out::println);
+     System.out.println("Player's hand total: " + pPlayer.getCardTotal());
   }
 
   /**
@@ -227,7 +230,7 @@ public class Blackjack {
       Scanner scannerInput = new Scanner(System.in);
       userInput = scannerInput.nextLine();
 
-      if (userInput.equalsIgnoreCase("M")) {
+      if (userInput.equalsIgnoreCase("M") || userInput.isEmpty() ) {
         player1.getHands().get(0).setBet(TABLE_MINIMUM);
         player1.setPlayerBank(player1.getPlayerBank() - TABLE_MINIMUM);
         System.out.println("PLAYER BANK IS: " + player1.getPlayerBank());

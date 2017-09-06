@@ -164,6 +164,22 @@ public class BlackjackPlayer extends Player {
     if (getCardTotal() > 21) {
       getHands().get(0).setBust(true);
     }
+    //TODO - move stick logic to hand and set here when value = 21
+    if (getCardTotal() == 21) {
+      //getHands().get(0).setSticking(true);
+    }
+  }
+
+  /**
+   * Double down the wagered bet on the Hand in play.  This can only be called on the first play on the hand,
+   * when it has only 2 cards.
+   */
+  public void doubleDown(Hand pHand){
+    if(!pHand.hasDoubledDown() && pHand.getNumberOfCardsInHand() == 2){
+      pHand.setHasDoubledDown(true);
+      setPlayerBank(getPlayerBank() - pHand.getBet());
+      pHand.setBet(pHand.getBet() * 2);
+    }
   }
 
   /**

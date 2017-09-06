@@ -79,16 +79,7 @@ public class Hand extends LinkedList<Card> {
   private boolean isSplittable = false;
 
 
-  /**
-   * Double down the wagered bet on the Hand in play.  This can only be called on the first play on the hand,
-   * when it has only 2 cards.
-   */
-  public void doubleDown(){
-    if(!hasDoubledDown() && getNumberOfCardsInHand() == 2){
-      setHasDoubledDown(true);
-      setBet(getBet() * 2);
-    }
-  }
+
 
   /**
    * @return
