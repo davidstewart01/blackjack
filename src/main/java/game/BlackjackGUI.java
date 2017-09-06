@@ -56,7 +56,7 @@ public class BlackjackGUI extends JPanel {
       hitbutton.addActionListener(new hitbutton());
       hitbutton.setEnabled(false);
       stickbutton.setText("  Stick");
-      //stickbutton.addActionListener(new stickbutton());
+      stickbutton.addActionListener(new stickbutton());
       stickbutton.setEnabled(false);
       playagainbutton.setText("  Play Again");
       //playagainbutton.addActionListener(new playagainbutton());
@@ -161,7 +161,7 @@ public class BlackjackGUI extends JPanel {
         dealbutton.setEnabled(false);
 
         /*if(game.blackj())
-        {
+        {stickbutton
           hitbutton.setEnabled(false);
           stickbutton.setEnabled(false);
           dealbutton.setEnabled(false);
@@ -208,38 +208,38 @@ public class BlackjackGUI extends JPanel {
      Tie goes to dealer.
      @param e stick button pressed
      *************************************************************/
-    /*class stickbutton implements ActionListener {
+    class stickbutton implements ActionListener {
       public void actionPerformed(ActionEvent e) {
 
         dcardPanel.remove(dealercard0);
         dcardPanel.add(dealercard1);
 
-        dealer = game.dealerPlays();
+        //dealer = game.dealerPlays();
         dcardPanel.removeAll();
         dcardPanel.add(dealerlabel);
         dealerlabel.setText(" " + dealerlabel.getText());
 
         //iterate through cards and re-display
         Card dhitcard = null;
-        Iterator<Card> scan = (dealer.inHand).iterator();
-        while (scan.hasNext())
-        {
+        Iterator<Card> scan = (game.dealer.getHands().get(0).iterator());
+        
+        while (scan.hasNext()) {
           dhitcard = scan.next();
-          dealercardhit = new JLabel(dhitcard.getimage());
+          dealercardhit = new JLabel(dhitcard.getCardImage());
           dcardPanel.add(dealercardhit);
         }
 
-        dealerlabel.setText("Dealer: " + game.handValue(dealer));
-        playerlabel.setText("Player: " + game.handValue(player));
+        dealerlabel.setText("Dealer: " + game.dealer.getHands().get(0));
+        playerlabel.setText("Player: " + game.player1.getHands().get(0));
 
-        winlosebox.setText(game.winner());
+        //winlosebox.setText(game.winner());
         hitbutton.setEnabled(false);
         stickbutton.setEnabled(false);
 
         playagainbutton.setEnabled(true);
-
+        dcardPanel.repaint();
       }
-    }//end stickbutton */
+    }//end stickbutton
 
     /*************************************************************
      PlayAgainButton
