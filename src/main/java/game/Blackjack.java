@@ -75,7 +75,7 @@ public class Blackjack {
           else if (userChoice.equalsIgnoreCase("D")) {
             player1.getHands().get(0).doubleDown();
             player1.hit(shoe.removeLast());
-            isGameFinished = true;
+            player1.setSticking(true);
           }
           else {
             System.exit(1);
