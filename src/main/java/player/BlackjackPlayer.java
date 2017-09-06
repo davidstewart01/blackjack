@@ -105,6 +105,27 @@ public class BlackjackPlayer extends Player {
   }
 
   //--------------------------------------------
+  // property: playerBank
+  //--------------------------------------------
+  private double mPlayerBank = 1000;
+
+  /**
+   * @return
+   *   how much the player has in their bank/chip stack
+   */
+  public double getPlayerBank() {
+    return mPlayerBank;
+  }
+
+  /**
+   * @param pPlayerBank
+   *   Value to set the player bank/chip stack to
+   */
+  public void setPlayerBank(double pPlayerBank) {
+    mPlayerBank = pPlayerBank;
+  }
+
+  //--------------------------------------------
   // property: sticking
   //--------------------------------------------
   private boolean mSticking = false;

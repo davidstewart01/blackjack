@@ -13,6 +13,12 @@ import java.util.Scanner;
  */
 public class Blackjack {
 
+  //---------------------------------------------------------------------
+  // CONSTANTS
+  //---------------------------------------------------------------------
+
+  public static final double TABLE_MINIMUM = 10;
+
   BlackjackDealer dealer = new BlackjackDealer();
   BlackjackPlayer player1 = new BlackjackPlayer();
   Shoe shoe = new Shoe(1, true);
@@ -47,6 +53,9 @@ public class Blackjack {
 
       //TODO - tidy up for the hand being played, not just the first one
       if (!dealersTurn) {
+        if (player1.getHands().get(0).getBet() == 0.0){
+          placeBets();
+        }
         if (!player1.isSticking() && !player1.getHands().get(0).isBust()) {
           System.out.println("");
           System.out.println("========");
@@ -129,6 +138,9 @@ public class Blackjack {
 
     if (dealer.getHands().get(0).isBust() && !player1.getHands().get(0).isBust()) {
       System.out.println("PLAYER1 WINS!");
+      //add bet plus win back to the player bank at 1:1
+      // TODO - determine value for BlackJack at 3:2
+      player1.setPlayerBank(player1.getPlayerBank() + (player1.getHands().get(0).getBet() * 2));
     }
     else if (player1.getHands().get(0).isBust() && !dealer.getHands().get(0).isBust()) {
       System.out.println("DEALER WINS!");
@@ -142,6 +154,9 @@ public class Blackjack {
       }
       else if (player1.getCardTotal() > dealer.getCardTotal()) {
         System.out.println("PLAYER1 WINS!");
+        //add bet plus win back to the player bank at 1:1
+        // TODO - determine value for BlackJack at 3:2
+        player1.setPlayerBank(player1.getPlayerBank() + (player1.getHands().get(0).getBet() * 2));
       }
       else {
         if (dealer.getHands().get(0).getNumberOfCardsInHand() > player1.getHands().get(0).getNumberOfCardsInHand()) {
@@ -155,6 +170,7 @@ public class Blackjack {
         }
       }
     }
+    System.out.println("PLAYER1 BANK: " + player1.getPlayerBank());
   }
 
   /**
@@ -169,7 +185,7 @@ public class Blackjack {
 
   /**
    * @return
-   *   The user's choice to hit, stick or quit.
+   *   The user's choice to hit, stick, double down or quit.
    */
   public String captureUserChoice() {
     boolean isValidChoice = false;
@@ -194,6 +210,35 @@ public class Blackjack {
     }
 
     return userInput;
+  }
+
+  /**
+   * @return
+   *   The bet value wagered on the hand.
+   */
+  public void placeBets() {
+    boolean isValidChoice = false;
+    String userInput = "";
+
+    while (!isValidChoice) {
+      System.out.println("Place your bets! Table Minimum is: " + TABLE_MINIMUM + "\n" +
+              "(M)inimum or numeric value: ");
+
+      Scanner scannerInput = new Scanner(System.in);
+      userInput = scannerInput.nextLine();
+
+      if (userInput.equalsIgnoreCase("M")) {
+        player1.getHands().get(0).setBet(TABLE_MINIMUM);
+        player1.setPlayerBank(player1.getPlayerBank() - TABLE_MINIMUM);
+        System.out.println("PLAYER BANK IS: " + player1.getPlayerBank());
+        isValidChoice = true;
+      }
+      else {
+        player1.getHands().get(0).setBet(Double.parseDouble(userInput));
+        player1.setPlayerBank(player1.getPlayerBank() - Double.valueOf(userInput));
+        System.out.println("PLAYER BANK IS: " + player1.getPlayerBank());
+      }
+    }
   }
 
 }
