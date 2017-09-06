@@ -1,5 +1,7 @@
 package card;
 
+import javax.swing.*;
+
 /**
  * Class that represents a single card.
  *
@@ -200,6 +202,27 @@ public class Card {
     return mId;
   }
 
+  //--------------------------
+  // property: cardImage
+  //--------------------------
+  private ImageIcon mCardImage = null;
+
+  /**
+   * @param pCardImage
+   *   The image associated with the card.
+   */
+  public void setCardImage(ImageIcon pCardImage) {
+    mCardImage = pCardImage;
+  }
+
+  /**
+   * @return
+   *   The image associated with the card.
+   */
+  public ImageIcon getCardImage() {
+    return mCardImage;
+  }
+
   //---------------------------------------------------------------------
   // CONSTRUCTORS
   //---------------------------------------------------------------------
@@ -233,6 +256,8 @@ public class Card {
       default:
         setId(Integer.toString(pRank.getValue()) + pSuit.getName().toLowerCase().substring(0, 1));
     }
+
+    setCardImage(new ImageIcon(this.getClass().getResource("card_images/" + getId() + ".jpg")));
   }
 
   //---------------------------------------------------------------------
