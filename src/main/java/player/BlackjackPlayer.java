@@ -125,27 +125,6 @@ public class BlackjackPlayer extends Player {
     mPlayerBank = pPlayerBank;
   }
 
-  //--------------------------------------------
-  // property: sticking
-  //--------------------------------------------
-  private boolean mSticking = false;
-
-  /**
-   * @param pSticking
-   *   Flag determining whether the player is sticking or not.
-   */
-  public void setSticking(boolean pSticking) {
-    mSticking = pSticking;
-  }
-
-  /**
-   * @return
-   *   Flag determining whether the player is sticking or not.
-   */
-  public boolean isSticking() {
-    return mSticking;
-  }
-
   //---------------------------------------------------------------------
   // METHODS
   //---------------------------------------------------------------------

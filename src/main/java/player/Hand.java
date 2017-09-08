@@ -31,6 +31,27 @@ public class Hand extends LinkedList<Card> {
   public void setBet(double pBet) {
     mBet = pBet;
   }
+  
+  //--------------------------------------------
+  // property: sticking
+  //--------------------------------------------
+  private boolean mSticking = false;
+  
+  /**
+   * @param pSticking
+   *   Flag determining whether the player is sticking or not.
+   */
+  public void setSticking(boolean pSticking) {
+    mSticking = pSticking;
+  }
+  
+  /**
+   * @return
+   *   Flag determining whether the player is sticking or not.
+   */
+  public boolean isSticking() {
+    return mSticking;
+  }
 
   //--------------------------------------------
   // property: bust

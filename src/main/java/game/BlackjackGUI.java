@@ -153,7 +153,7 @@ public class BlackjackGUI extends JPanel {
         pcardPanel.add(playercard1);
         pcardPanel.add(playercard2);
 
-        dealerlabel.setText("  Dealer:  " + dcard);
+        dealerlabel.setText("  Dealer:  " + game.dealer.getCardTotal());
         playerlabel.setText("  Player:  " + game.player1.getCardTotal());
 
         hitbutton.setEnabled(true);
@@ -189,12 +189,13 @@ public class BlackjackGUI extends JPanel {
         pcardPanel.add(playercardhit);
         pcardPanel.repaint();
 
-        if(game.player1.getHands().get(0).isBust()) {
-          winlosebox.setText("Bust");
+        if (game.player1.getHands().get(0).isBust()) {
           hitbutton.setEnabled(false);
           dealbutton.setEnabled(false);
           stickbutton.setEnabled(false);
           playagainbutton.setEnabled(true);
+          
+          dealersTurn();
         }
 
         playerlabel.setText("  Player:   " + game.player1.getCardTotal());
@@ -210,36 +211,10 @@ public class BlackjackGUI extends JPanel {
      *************************************************************/
     class stickbutton implements ActionListener {
       public void actionPerformed(ActionEvent e) {
-
-        dcardPanel.remove(dealercard0);
-        dcardPanel.add(dealercard1);
-
-        //dealer = game.dealerPlays();
-        dcardPanel.removeAll();
-        dcardPanel.add(dealerlabel);
-        dealerlabel.setText(" " + dealerlabel.getText());
-
-        //iterate through cards and re-display
-        Card dhitcard = null;
-        Iterator<Card> scan = (game.dealer.getHands().get(0).iterator());
-        
-        while (scan.hasNext()) {
-          dhitcard = scan.next();
-          dealercardhit = new JLabel(dhitcard.getCardImage());
-          dcardPanel.add(dealercardhit);
-        }
-
-        dealerlabel.setText("Dealer: " + game.dealer.getHands().get(0));
-        playerlabel.setText("Player: " + game.player1.getHands().get(0));
-
-        //winlosebox.setText(game.winner());
-        hitbutton.setEnabled(false);
-        stickbutton.setEnabled(false);
-
-        playagainbutton.setEnabled(true);
-        dcardPanel.repaint();
+        game.player1.getHands().get(0).setSticking(true);
+        dealersTurn();
       }
-    }//end stickbutton
+    }
 
     /*************************************************************
      PlayAgainButton
@@ -269,6 +244,87 @@ public class BlackjackGUI extends JPanel {
 
 
 
-
-
+    public void dealersTurn() {
+      dcardPanel.remove(dealercard0);
+      dcardPanel.add(dealercard1);
+  
+      //dealer = game.dealerPlays();
+      dcardPanel.removeAll();
+      dcardPanel.add(dealerlabel);
+      dealerlabel.setText(" " + dealerlabel.getText() + ": " + game.dealer.getCardTotal());
+  
+      //iterate through cards and re-display
+      Card dhitcard = null;
+      Iterator<Card> scan = (game.dealer.getHands().get(0).iterator());
+  
+      while (scan.hasNext()) {
+        dhitcard = scan.next();
+        dealercardhit = new JLabel(dhitcard.getCardImage());
+        dcardPanel.add(dealercardhit);
+      }
+      
+      playerlabel.setText("Player: " + game.player1.getHands().get(0));
+      
+      hitbutton.setEnabled(false);
+      stickbutton.setEnabled(false);
+  
+      playagainbutton.setEnabled(true);
+      dcardPanel.repaint();
+  
+      boolean isGameFinished = false;
+      
+      while(!isGameFinished) {
+        if (!game.dealer.getHands().get(0).isSticking() && !game.dealer.getHands().get(0).isBust()) {
+          if (game.dealer.getCardTotal() < 17) {
+            Card card = game.shoe.removeLast();
+            game.dealer.hit(card);
+            dealercardhit = new JLabel(card.getCardImage());
+            dcardPanel.add(dealercardhit);
+            pcardPanel.repaint();
+          }
+          else {
+            game.dealer.getHands().get(0).setSticking(true);
+          }
+        }
+  
+        if (game.dealer.getHands().get(0).isSticking() || game.dealer.getHands().get(0).isBust()) {
+          isGameFinished = true;
+        }
+      }
+  
+      dealerlabel.setText("Dealer: " + game.dealer.getCardTotal());
+      playerlabel.setText("Player1: " + game.player1.getCardTotal());
+      determineGameOutcome();
+    }
+  
+  
+  public void determineGameOutcome() {
+    hitbutton.setEnabled(false);
+    dealbutton.setEnabled(false);
+    stickbutton.setEnabled(false);
+    playagainbutton.setEnabled(true);
+    
+    if (game.dealer.getCardTotal() > 21 && game.player1.getCardTotal() <= 21) {
+      winlosebox.setText("Dealer Bust, Player1 wins");
+    }
+    else if (game.player1.getCardTotal() > 21 && game.dealer.getCardTotal() <= 21) {
+      winlosebox.setText("Player1 BUST, Dealer wins");
+    }
+  
+    else if (game.player1.getCardTotal() > 21 && game.dealer.getCardTotal() > 21) {
+      winlosebox.setText("Player1 and Dealer BUST!");
+    }
+    else {
+      if (game.dealer.getCardTotal() > game.player1.getCardTotal()) {
+        winlosebox.setText("DEALER WINS!");
+      }
+      else if (game.player1.getCardTotal() > game.dealer.getCardTotal()) {
+        winlosebox.setText("PLAYER1 WINS!");
+      }
+      else {
+        winlosebox.setText("ITS A DRAW!");
+      }
+    }
+  }
+  
 }

@@ -56,7 +56,7 @@ public class Blackjack {
         if (player1.getHands().get(0).getBet() == 0.0){
           placeBets();
         }
-        if (!player1.isSticking() && !player1.getHands().get(0).isBust()) {
+        if (!player1.getHands().get(0).isSticking() && !player1.getHands().get(0).isBust()) {
           System.out.println("");
           System.out.println("========");
           System.out.println("Dealer's card: " + dealer.getHands().get(0));
@@ -71,38 +71,42 @@ public class Blackjack {
             player1.hit(shoe.removeLast());
           }
           else if (userChoice.equalsIgnoreCase("S")) {
-            player1.setSticking(true);
+            player1.getHands().get(0).setSticking(true);
           }
           else if (userChoice.equalsIgnoreCase("D")) {
             player1.doubleDown(player1.getHands().get(0));
             player1.hit(shoe.removeLast());
-            player1.setSticking(true);
+            player1.getHands().get(0).setSticking(true);
           }
           else {
             System.exit(1);
           }
         }
+        
         //TODO - remove this when dealing multiple hands, TEST ONLY
         if (player1.getHands().get(0).isBust()){
           isGameFinished = true;
         }
-        if ((!dealer.isSticking() || !dealer.getHands().get(0).isBust()) && player1.isSticking()) {
+        
+        if ((!dealer.getHands().get(0).isSticking()
+            || !dealer.getHands().get(0).isBust()) && player1.getHands().get(0).isSticking()) {
+          
           dealersTurn = true;
         }
       }
       // Dealers turns
       else {
-        if (!dealer.isSticking() && !dealer.getHands().get(0).isBust()) {
+        if (!dealer.getHands().get(0).isSticking() && !dealer.getHands().get(0).isBust()) {
           if (dealer.getCardTotal() < 17) {
             dealer.hit(shoe.removeLast());
           }
           else {
-            dealer.setSticking(true);
+            dealer.getHands().get(0).setSticking(true);
           }
         }
 
-        if ((dealer.isSticking() || dealer.getHands().get(0).isBust())
-            && (player1.isSticking() || player1.getHands().get(0).isBust())) {
+        if ((dealer.getHands().get(0).isSticking() || dealer.getHands().get(0).isBust())
+            && (player1.getHands().get(0).isSticking() || player1.getHands().get(0).isBust())) {
 
           isGameFinished = true;
         }
