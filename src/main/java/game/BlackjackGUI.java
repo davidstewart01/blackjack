@@ -72,16 +72,22 @@ public class BlackjackGUI extends JPanel {
     playerCardPanel.setBackground(new Color(0, 122, 0));
 
     topPanel.setLayout(new FlowLayout());
+
     statusTextBox.setText(" ");
     statusTextBox.setFont(new java.awt.Font("Helvetica Bold", 1, 20));
+    statusTextBox.setVisible(false);
+
     dealButton.setText("  Deal");
     dealButton.addActionListener(new dealButton());
+
     hitButton.setText("  Hit");
     hitButton.addActionListener(new hitButton());
     hitButton.setEnabled(false);
+
     stickButton.setText("  Stick");
     stickButton.addActionListener(new stickButton());
     stickButton.setEnabled(false);
+
     playAgainButton.setText("  Play Again");
     //playAgainButton.addActionListener(new playAgainButton());
     playAgainButton.setEnabled(false);
@@ -94,14 +100,15 @@ public class BlackjackGUI extends JPanel {
     topPanel.add(hitButton);
     topPanel.add(stickButton);
     topPanel.add(playAgainButton);
+
     playerCardPanel.add(playerLabel);
     dealerCardPanel.add(dealerLabel);
 
     setLayout(new BorderLayout());
+
     add(topPanel,BorderLayout.NORTH);
     add(dealerCardPanel,BorderLayout.CENTER);
     add(playerCardPanel,BorderLayout.SOUTH);
-
   }
 
   /**
@@ -184,18 +191,17 @@ public class BlackjackGUI extends JPanel {
         stickButton.setEnabled(true);
         dealButton.setEnabled(false);
 
-        /*if(game.blackj())
-        {stickButton
+        if (game.player1.getCardTotal() == 21){
           hitButton.setEnabled(false);
           stickButton.setEnabled(false);
           dealButton.setEnabled(false);
           playAgainButton.setEnabled(true);
-          statusTextBox.setText("BlackJack");
-        }*/
+
+          dealersTurn();
+        }
 
         add(dealerCardPanel,BorderLayout.CENTER);
         add(playerCardPanel,BorderLayout.SOUTH);
-
       }
     }//end dealButton
 
@@ -207,13 +213,14 @@ public class BlackjackGUI extends JPanel {
      *************************************************************/
     class hitButton implements ActionListener {
       public void actionPerformed(ActionEvent e) {
+
         Card hitCard = game.shoe.removeLast();
         game.player1.hit(hitCard);
         playercardhit = new JLabel(hitCard.getCardImage());
         playerCardPanel.add(playercardhit);
         playerCardPanel.repaint();
 
-        if (game.player1.getHands().get(0).isBust()) {
+        if (game.player1.getHands().get(0).isBust() || game.player1.getCardTotal() == 21) {
           hitButton.setEnabled(false);
           dealButton.setEnabled(false);
           stickButton.setEnabled(false);
@@ -328,8 +335,26 @@ public class BlackjackGUI extends JPanel {
     dealButton.setEnabled(false);
     stickButton.setEnabled(false);
     playAgainButton.setEnabled(true);
-    
-    if (game.dealer.getCardTotal() > 21 && game.player1.getCardTotal() <= 21) {
+    statusTextBox.setVisible(true);
+
+    if ((game.dealer.getHands().get(0).getNumberOfCardsInHand() == 2 && game.dealer.getCardTotal() == 21)
+        && game.player1.getHands().get(0).getNumberOfCardsInHand() == 2 && game.player1.getCardTotal() == 21) {
+
+      statusTextBox.setText("Player and Dealer have Blackjack!");
+    }
+    else if ((game.dealer.getHands().get(0).getNumberOfCardsInHand() == 2 && game.dealer.getCardTotal() == 21)
+      && ((game.player1.getHands().get(0).getNumberOfCardsInHand() == 2 && game.player1.getCardTotal() != 21)
+        || game.player1.getHands().get(0).getNumberOfCardsInHand() > 2)) {
+
+      statusTextBox.setText("Dealer has Blackjack!");
+    }
+    else if ((game.player1.getHands().get(0).getNumberOfCardsInHand() == 2 && game.player1.getCardTotal() == 21)
+      && ((game.dealer.getHands().get(0).getNumberOfCardsInHand() == 2 && game.dealer.getCardTotal() != 21)
+        || game.dealer.getHands().get(0).getNumberOfCardsInHand() > 2)) {
+
+      statusTextBox.setText("Player has Blackjack!");
+    }
+    else if (game.dealer.getCardTotal() > 21 && game.player1.getCardTotal() <= 21) {
       statusTextBox.setText("Dealer Bust, Player1 wins");
     }
     else if (game.player1.getCardTotal() > 21 && game.dealer.getCardTotal() <= 21) {
