@@ -303,18 +303,27 @@ public class BlackjackGUI extends JPanel {
    * Captures user input for placing a bet.
    */
   public void placeBet() {
-    String userInput = JOptionPane.showInputDialog("How much do you want to bet? Press \"M\" for minimum bet.");
+    boolean isValidChoice = false;
 
-    if (userInput.equalsIgnoreCase("M") || userInput.isEmpty() ) {
-      game.player1.getHands().get(0).setBet(Blackjack.TABLE_MINIMUM);
-      game.player1.setPlayerBank(game.player1.getPlayerBank() - Blackjack.TABLE_MINIMUM);
-      updateBankLabel();
-      //isValidChoice = true;
-    }
-    else {
-      game.player1.getHands().get(0).setBet(Double.parseDouble(userInput));
-      game.player1.setPlayerBank(game.player1.getPlayerBank() - Double.valueOf(userInput));
-      updateBankLabel();
+    while (!isValidChoice) {
+      String userInput = JOptionPane.showInputDialog("How much do you want to bet? Press \"M\" for minimum bet.");
+
+      if (userInput.equalsIgnoreCase("M") || userInput.isEmpty()) {
+        game.player1.getHands().get(0).setBet(Blackjack.TABLE_MINIMUM);
+        game.player1.setPlayerBank(game.player1.getPlayerBank() - Blackjack.TABLE_MINIMUM);
+        updateBankLabel();
+        isValidChoice = true;
+      }
+      else {
+        try {
+          game.player1.getHands().get(0).setBet(Double.parseDouble(userInput));
+          game.player1.setPlayerBank(game.player1.getPlayerBank() - Double.valueOf(userInput));
+          updateBankLabel();
+        }
+        catch (NumberFormatException nfe) {
+          JOptionPane.showMessageDialog(this.getParent(), "Enter \"M\" for minimum bet or a numerical value.");
+        }
+      }
     }
   }
 
