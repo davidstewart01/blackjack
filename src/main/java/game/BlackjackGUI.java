@@ -319,6 +319,7 @@ public class BlackjackGUI extends JPanel {
           game.player1.getHands().get(0).setBet(Double.parseDouble(userInput));
           game.player1.setPlayerBank(game.player1.getPlayerBank() - Double.valueOf(userInput));
           updateBankLabel();
+          isValidChoice = true;
         }
         catch (NumberFormatException nfe) {
           JOptionPane.showMessageDialog(this.getParent(), "Enter \"M\" for minimum bet or a numerical value.");
