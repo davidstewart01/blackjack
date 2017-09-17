@@ -3,6 +3,7 @@ package game;
 import card.Shoe;
 import player.BlackjackDealer;
 import player.BlackjackPlayer;
+import player.Hand;
 
 import java.util.Scanner;
 
@@ -25,10 +26,7 @@ public class Blackjack {
 
   public Blackjack() {
     //TODO fix this up to handle multiple hands more cleanly
-    player1.getHands().get(0).add(shoe.removeLast());
-    dealer.getHands().get(0).add(shoe.removeLast());
-    player1.getHands().get(0).add(shoe.removeLast());
-    dealer.getHands().get(0).add(shoe.removeLast());
+    //deal();
   }
 
   /**
@@ -39,6 +37,19 @@ public class Blackjack {
   public static void main(String[] pArgs) {
     Blackjack blackjack = new Blackjack();
     blackjack.start();
+  }
+
+  /**
+   *
+   */
+  public void deal() {
+    player1.getHands().add(new Hand());
+    dealer.getHands().add(new Hand());
+
+    player1.getHands().get(0).add(shoe.removeLast());
+    dealer.getHands().get(0).add(shoe.removeLast());
+    player1.getHands().get(0).add(shoe.removeLast());
+    dealer.getHands().get(0).add(shoe.removeLast());
   }
 
   /**

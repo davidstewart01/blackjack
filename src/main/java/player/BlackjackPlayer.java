@@ -38,7 +38,7 @@ public class BlackjackPlayer extends Player {
     super.setUserName("Player" + random.nextInt());
     super.setPlayerType(Type.PLAYER);
     //initialise a blank hand for play
-    getHands().add(new Hand());
+    //getHands().add(new Hand());
   }
 
   /**
