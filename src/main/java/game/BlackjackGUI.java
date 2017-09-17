@@ -53,12 +53,15 @@ public class BlackjackGUI extends JPanel {
   /** Label that indicates that the player is the player. */
   private JLabel playerLabel = new JLabel();
 
-  /** The game. */
-  private Blackjack game = null;
+  // Action commands.
+  private static final String DEAL_ACTION_COMMAND = "DEAL";
+  private static final String STICK_ACTION_COMMAND = "STICK";
+  private static final String DOUBLE_DOWN_ACTION_COMMAND = "DOUBLE_DOWN";
+  private static final String HIT_ACTION_COMMAND = "HIT";
+  private static final String PLAY_AGAIN_ACTION_COMMAND = "PLAY_AGAIN";
 
-  /*************************************************************
-   the labels to represent the cards for the game
-   *************************************************************/
+  // The labels to represent the cards for the game.
+
   // TODO: Make local variables where appropriate.
   private JLabel playercard1 = null;
   private JLabel playercard2 = null;
@@ -68,9 +71,12 @@ public class BlackjackGUI extends JPanel {
   private JLabel dealercard1 = null;
   private JLabel dealercardhit = null;
 
-  /*************************************************************
-   Constructs the screen
-   *************************************************************/
+  /** The game. */
+  private Blackjack game = null;
+
+  /**
+   * Constructs the GUI.
+   */
   public BlackjackGUI () {
     
     /** Instantiate the game. */
@@ -87,22 +93,27 @@ public class BlackjackGUI extends JPanel {
     statusTextBox.setVisible(false);
 
     dealButton.setText("  Deal");
-    dealButton.addActionListener(new DealButton());
+    dealButton.addActionListener(new GameButtonListener());
+    dealButton.setActionCommand(DEAL_ACTION_COMMAND);
 
     hitButton.setText("  Hit");
-    hitButton.addActionListener(new HitButton());
+    hitButton.addActionListener(new GameButtonListener());
+    hitButton.setActionCommand(HIT_ACTION_COMMAND);
     hitButton.setEnabled(false);
 
     stickButton.setText("  Stick");
-    stickButton.addActionListener(new StickButton());
+    stickButton.addActionListener(new GameButtonListener());
+    stickButton.setActionCommand(STICK_ACTION_COMMAND);
     stickButton.setEnabled(false);
 
     doubleDownButton.setText("  Double Down");
-    doubleDownButton.addActionListener(new DoubleDownButton());
+    doubleDownButton.addActionListener(new GameButtonListener());
+    doubleDownButton.setActionCommand(DOUBLE_DOWN_ACTION_COMMAND);
     doubleDownButton.setEnabled(false);
 
     playAgainButton.setText("  Play Again");
-    playAgainButton.addActionListener(new playAgainButton());
+    playAgainButton.addActionListener(new GameButtonListener());
+    playAgainButton.setActionCommand(PLAY_AGAIN_ACTION_COMMAND);
     playAgainButton.setEnabled(false);
 
     dealerLabel.setText("  Dealer:  ");
@@ -133,43 +144,55 @@ public class BlackjackGUI extends JPanel {
       JFrame myFrame = new JFrame("BlackJack");
       myFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
       myFrame.setContentPane(this);
-      myFrame.setPreferredSize(new Dimension(700,550));
+      myFrame.setPreferredSize(new Dimension(800,650));
+      myFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
       //Display the window.
       myFrame.pack();
       myFrame.setVisible(true);
+      myFrame.setLocationRelativeTo(null);
 
     }//end display
 
-    /*************************************************************
-     DealButton
-     @param e Deal button pressed
-     *************************************************************/
-    class DealButton implements ActionListener {
-      public void actionPerformed(ActionEvent e) {
-        deal();
+  /**
+   * Action event listener class for all game buttons such as hit, deal, stick etc.
+   */
+  class GameButtonListener implements ActionListener {
+    public void actionPerformed(ActionEvent pEvent) {
+
+      switch (pEvent.getActionCommand()) {
+        case DEAL_ACTION_COMMAND:
+          deal();
+          break;
+        case HIT_ACTION_COMMAND:
+          hit();
+          break;
+        case STICK_ACTION_COMMAND:
+          stick();
+          break;
+        case DOUBLE_DOWN_ACTION_COMMAND:
+          doubleDown();
+          break;
+        case PLAY_AGAIN_ACTION_COMMAND:
+          playagain();
       }
     }
+  }
 
+  /**
+   * Deal out the dealer and player cards.
+   */
   public void deal() {
     game.deal();
-
     placeBet();
 
     dealerCardPanel.add(dealerLabel);
     playerCardPanel.add(playerLabel);
     playerBankPanel.add(playerBankLabel);
 
-    // Get's dealer and player cards from Hand
-    // and the image associated with that random
-    // card and puts them on the screen.
-
-
     dealercard0 = new JLabel(new ImageIcon(this.getClass().getResource("../card/card_images/back.jpg")));
 
-    //game.dealInitialCards();
-
-    //to iterate set and get current dealer cards
+    // To iterate set and get current dealer cards.
     Card dcard=null;
 
     Iterator<Card> dscan = (game.dealer.getHands().get(0)).iterator();
@@ -193,10 +216,12 @@ public class BlackjackGUI extends JPanel {
     while (pscan.hasNext()) {
       Card pcard = pscan.next();
 
-      if(count==0)
+      if (count==0) {
         playercard1 = new JLabel(pcard.getCardImage());
-      else
+      }
+      else {
         playercard2 = new JLabel(pcard.getCardImage());
+      }
 
       count++;
     }
@@ -231,21 +256,8 @@ public class BlackjackGUI extends JPanel {
     add(playerBankPanel, BorderLayout.EAST);
   }
 
-
-    /*************************************************************
-     HitButton
-     every time the player wants another card
-     until hand value is over 21.
-     @param e Hit button pressed
-     *************************************************************/
-    class HitButton implements ActionListener {
-      public void actionPerformed(ActionEvent e) {
-        hit();
-      }
-    }//end hitButton
-
   /**
-   *
+   * Deals the payer another card.
    */
   public void hit() {
     doubleDownButton.setEnabled(false);
@@ -268,21 +280,8 @@ public class BlackjackGUI extends JPanel {
     playerLabel.setText("  Player:   " + game.player1.getCardTotal());
   }
 
-    /*************************************************************
-     stickButton
-     dealer must hit on 16 or lower. determines the winner,
-     player wins if under 21 and above dealer.
-     Tie goes to dealer.
-     @param e stick button pressed
-     *************************************************************/
-    class StickButton implements ActionListener {
-      public void actionPerformed(ActionEvent e) {
-        stick();
-      }
-    }
-
   /**
-   *
+   * Sets the player's hand to stick and switches to the dealer.
    */
   public void stick() {
     game.player1.getHands().get(0).setSticking(true);
@@ -290,16 +289,7 @@ public class BlackjackGUI extends JPanel {
   }
 
   /**
-   *
-   */
-  class DoubleDownButton implements ActionListener {
-    public void actionPerformed(ActionEvent e) {
-      doubleDown();
-    }
-  }
-
-  /**
-   *
+   * Double down on the player's bet.
    */
   public void doubleDown() {
     doubleDownButton.setEnabled(false);
@@ -310,11 +300,10 @@ public class BlackjackGUI extends JPanel {
   }
 
   /**
-   *
+   * Captures user input for placing a bet.
    */
   public void placeBet() {
-
-    String userInput = JOptionPane.showInputDialog("How much do you want to bet?");
+    String userInput = JOptionPane.showInputDialog("How much do you want to bet? Press \"M\" for minimum bet.");
 
     if (userInput.equalsIgnoreCase("M") || userInput.isEmpty() ) {
       game.player1.getHands().get(0).setBet(Blackjack.TABLE_MINIMUM);
@@ -330,98 +319,87 @@ public class BlackjackGUI extends JPanel {
   }
 
   /**
-   *
+   * Reset the GUI for a new game. This doesn't reset the bank.
    */
-  private void updateBankLabel() {
-    playerBankLabel.setText("  Bank:  " + game.player1.getPlayerBank());
+  public void playagain() {
+    dealerLabel.setText("Dealer: ");
+    playerLabel.setText("Player: ");
+    statusTextBox.setText("");
+
+    game.dealer.getHands().clear();
+    game.player1.getHands().clear();
+
+    dealerCardPanel.removeAll();
+    playerCardPanel.removeAll();
+
+    hitButton.setEnabled(false);
+    stickButton.setEnabled(false);
+    playAgainButton.setEnabled(false);
+    doubleDownButton.setEnabled(false);
+    dealButton.setEnabled(true);
+    statusTextBox.setVisible(false);
+
+    deal();
   }
 
-    /*************************************************************
-     PlayAgainButton
-     resets screen
-     @param e Play Again button pressed
-     *************************************************************/
-    class playAgainButton implements ActionListener {
-      public void actionPerformed(ActionEvent e) {
+  /**
+   * Switches to the dealer.
+   */
+  public void dealersTurn() {
+    dealerCardPanel.remove(dealercard0);
+    dealerCardPanel.add(dealercard1);
+    dealerCardPanel.removeAll();
+    dealerCardPanel.add(dealerLabel);
+    dealerLabel.setText(" " + dealerLabel.getText() + ": " + game.dealer.getCardTotal());
 
-        dealerLabel.setText("Dealer: ");
-        playerLabel.setText("Player: ");
-        statusTextBox.setText("");
+    //iterate through cards and re-display
+    Card dhitcard = null;
+    Iterator<Card> scan = (game.dealer.getHands().get(0).iterator());
 
-        game.dealer.getHands().clear();
-        game.player1.getHands().clear();
+    while (scan.hasNext()) {
+      dhitcard = scan.next();
+      dealercardhit = new JLabel(dhitcard.getCardImage());
+      dealerCardPanel.add(dealercardhit);
+    }
 
-        dealerCardPanel.removeAll();
-        playerCardPanel.removeAll();
+    playerLabel.setText("Player: " + game.player1.getHands().get(0));
 
-        hitButton.setEnabled(false);
-        stickButton.setEnabled(false);
-        playAgainButton.setEnabled(false);
-        doubleDownButton.setEnabled(false);
-        dealButton.setEnabled(true);
-        statusTextBox.setVisible(false);
+    hitButton.setEnabled(false);
+    stickButton.setEnabled(false);
 
-        deal();
+    playAgainButton.setEnabled(true);
+    dealerCardPanel.repaint();
+
+    boolean isGameFinished = game.player1.getHands().get(0).isBust();
+
+    while(!isGameFinished) {
+      if (!game.dealer.getHands().get(0).isSticking() && !game.dealer.getHands().get(0).isBust()) {
+        if (game.dealer.getCardTotal() < 17) {
+          Card card = game.shoe.removeLast();
+          game.dealer.hit(card);
+          dealercardhit = new JLabel(card.getCardImage());
+          dealerCardPanel.add(dealercardhit);
+          playerCardPanel.repaint();
+        }
+        else {
+          game.dealer.getHands().get(0).setSticking(true);
+        }
+      }
+
+      if (game.dealer.getHands().get(0).isSticking() || game.dealer.getHands().get(0).isBust()) {
+        isGameFinished = true;
       }
     }
 
+    dealerLabel.setText("Dealer: " + game.dealer.getCardTotal());
+    playerLabel.setText("Player1: " + game.player1.getCardTotal());
+    determineGameOutcome();
+  }
 
-
-    public void dealersTurn() {
-      
-      dealerCardPanel.remove(dealercard0);
-      dealerCardPanel.add(dealercard1);
-  
-      //dealer = game.dealerPlays();
-      dealerCardPanel.removeAll();
-      dealerCardPanel.add(dealerLabel);
-      dealerLabel.setText(" " + dealerLabel.getText() + ": " + game.dealer.getCardTotal());
-  
-      //iterate through cards and re-display
-      Card dhitcard = null;
-      Iterator<Card> scan = (game.dealer.getHands().get(0).iterator());
-  
-      while (scan.hasNext()) {
-        dhitcard = scan.next();
-        dealercardhit = new JLabel(dhitcard.getCardImage());
-        dealerCardPanel.add(dealercardhit);
-      }
-      
-      playerLabel.setText("Player: " + game.player1.getHands().get(0));
-      
-      hitButton.setEnabled(false);
-      stickButton.setEnabled(false);
-  
-      playAgainButton.setEnabled(true);
-      dealerCardPanel.repaint();
-  
-      boolean isGameFinished = game.player1.getHands().get(0).isBust();
-      
-      while(!isGameFinished) {
-        if (!game.dealer.getHands().get(0).isSticking() && !game.dealer.getHands().get(0).isBust()) {
-          if (game.dealer.getCardTotal() < 17) {
-            Card card = game.shoe.removeLast();
-            game.dealer.hit(card);
-            dealercardhit = new JLabel(card.getCardImage());
-            dealerCardPanel.add(dealercardhit);
-            playerCardPanel.repaint();
-          }
-          else {
-            game.dealer.getHands().get(0).setSticking(true);
-          }
-        }
-  
-        if (game.dealer.getHands().get(0).isSticking() || game.dealer.getHands().get(0).isBust()) {
-          isGameFinished = true;
-        }
-      }
-  
-      dealerLabel.setText("Dealer: " + game.dealer.getCardTotal());
-      playerLabel.setText("Player1: " + game.player1.getCardTotal());
-      determineGameOutcome();
-    }
-  
-  
+  /**
+   * This method contains the logic for deciding who won the game and updates
+   * the player's bank accordingly.
+   */
   public void determineGameOutcome() {
     hitButton.setEnabled(false);
     dealButton.setEnabled(false);
@@ -482,5 +460,12 @@ public class BlackjackGUI extends JPanel {
 
     updateBankLabel();
   }
-  
+
+  /**
+   * Convenience method for updating the player's bank status.
+   */
+  private void updateBankLabel() {
+    playerBankLabel.setText("  Bank:  " + game.player1.getPlayerBank());
+  }
+
 }
