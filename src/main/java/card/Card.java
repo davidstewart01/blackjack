@@ -257,7 +257,7 @@ public class Card {
         setId(Integer.toString(pRank.getValue()) + pSuit.getName().toLowerCase().substring(0, 1));
     }
 
-    setCardImage(new ImageIcon(this.getClass().getResource("card_images/" + getId() + ".jpg")));
+    setCardImage(new ImageIcon(this.getClass().getResource("/card_images/" + getId() + ".jpg")));
   }
 
   //---------------------------------------------------------------------

@@ -190,7 +190,7 @@ public class BlackjackGUI extends JPanel {
     playerCardPanel.add(playerLabel);
     playerBankPanel.add(playerBankLabel);
 
-    dealercard0 = new JLabel(new ImageIcon(this.getClass().getResource("../card/card_images/back.jpg")));
+    dealercard0 = new JLabel(new ImageIcon(this.getClass().getResource("/card_images/back.jpg")));
 
     // To iterate set and get current dealer cards.
     Card dcard=null;
