@@ -109,52 +109,7 @@ public class BlackjackGUI extends JPanel {
   //-------------------------------------------------------------
   
   /** The game instance. */
-  private Blackjack game = null;
-  
-  //-------------------------------------------------------------
-  // CONSTRUCTORS
-  //-------------------------------------------------------------
-  
-  /**
-   * Constructs the GUI.
-   */
-  public BlackjackGUI () {
-    
-    //Instantiate the game.
-    game = new Blackjack();
-    
-    topPanel.setBackground(new Color(0, 122, 0));
-    dealerCardPanel.setBackground(new Color(0, 122, 0));
-    playerCardPanel.setBackground(new Color(0, 122, 0));
-
-    topPanel.setLayout(new FlowLayout());
-
-    statusTextBox.setText(" ");
-    statusTextBox.setFont(new java.awt.Font("Helvetica Bold", 1, 20));
-    statusTextBox.setVisible(false);
-  
-    createGameButtons();
-
-    dealerLabel.setText("  Dealer:  ");
-    playerLabel.setText("  Player:  ");
-    updateBankLabel();
-
-    topPanel.add(statusTextBox);
-    topPanel.add(dealButton);
-    topPanel.add(hitButton);
-    topPanel.add(stickButton);
-    topPanel.add(doubleDownButton);
-    topPanel.add(playAgainButton);
-
-    playerCardPanel.add(playerLabel);
-    dealerCardPanel.add(dealerLabel);
-
-    setLayout(new BorderLayout());
-
-    add(topPanel,BorderLayout.NORTH);
-    add(dealerCardPanel,BorderLayout.CENTER);
-    add(playerCardPanel,BorderLayout.SOUTH);
-  }
+  private Blackjack game = new Blackjack();
   
   //-------------------------------------------------------------
   // METHODS
@@ -163,7 +118,39 @@ public class BlackjackGUI extends JPanel {
   /**
    * Show the game.
    */
-    public void display() {
+    public void initialiseAndDisplayGame() {
+      topPanel.setBackground(new Color(0, 122, 0));
+      dealerCardPanel.setBackground(new Color(0, 122, 0));
+      playerCardPanel.setBackground(new Color(0, 122, 0));
+  
+      topPanel.setLayout(new FlowLayout());
+  
+      statusTextBox.setText(" ");
+      statusTextBox.setFont(new java.awt.Font("Helvetica Bold", 1, 20));
+      statusTextBox.setVisible(false);
+  
+      createGameButtons();
+  
+      dealerLabel.setText("  Dealer:  ");
+      playerLabel.setText("  Player:  ");
+      updateBankLabel();
+  
+      topPanel.add(statusTextBox);
+      topPanel.add(dealButton);
+      topPanel.add(hitButton);
+      topPanel.add(stickButton);
+      topPanel.add(doubleDownButton);
+      topPanel.add(playAgainButton);
+  
+      playerCardPanel.add(playerLabel);
+      dealerCardPanel.add(dealerLabel);
+  
+      setLayout(new BorderLayout());
+  
+      add(topPanel,BorderLayout.NORTH);
+      add(dealerCardPanel,BorderLayout.CENTER);
+      add(playerCardPanel,BorderLayout.SOUTH);
+      
       JFrame myFrame = new JFrame("BlackJack");
       myFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
       myFrame.setContentPane(this);
@@ -174,7 +161,6 @@ public class BlackjackGUI extends JPanel {
       myFrame.pack();
       myFrame.setVisible(true);
       myFrame.setLocationRelativeTo(null);
-
     }//end display
 
   /**

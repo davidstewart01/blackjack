@@ -7,7 +7,7 @@ public class BlackjackLauncher {
 
   public static void main(String[] args) {
     BlackjackGUI frame = new BlackjackGUI();
-    frame.display();
+    frame.initialiseAndDisplayGame();
   }
 
 }
