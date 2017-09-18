@@ -184,15 +184,15 @@ public class BlackjackConsole {
     String userInput = "";
 
     while (!isValidChoice) {
-      System.out.println("Place your bets! Table Minimum is: " + Blackjack.TABLE_MINIMUM + "\n" +
+      System.out.println("Place your bets! Table Minimum is: " + Blackjack.sTableMinimumBet + "\n" +
         "(M)inimum or numeric value: ");
 
       Scanner scannerInput = new Scanner(System.in);
       userInput = scannerInput.nextLine();
 
       if (userInput.equalsIgnoreCase("M") || userInput.isEmpty() ) {
-        game.getPlayers().get(0).getHands().get(0).setBet(Blackjack.TABLE_MINIMUM);
-        game.getPlayers().get(0).setPlayerBank(game.getPlayers().get(0).getPlayerBank() - Blackjack.TABLE_MINIMUM);
+        game.getPlayers().get(0).getHands().get(0).setBet(Blackjack.sTableMinimumBet);
+        game.getPlayers().get(0).setPlayerBank(game.getPlayers().get(0).getPlayerBank() - Blackjack.sTableMinimumBet);
         System.out.println("PLAYER BANK IS: " + game.getPlayers().get(0).getPlayerBank());
         isValidChoice = true;
       }

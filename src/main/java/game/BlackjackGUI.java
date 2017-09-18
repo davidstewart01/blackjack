@@ -296,8 +296,8 @@ public class BlackjackGUI extends JPanel {
       String userInput = JOptionPane.showInputDialog("How much do you want to bet? Press \"M\" for minimum bet.");
 
       if (userInput.equalsIgnoreCase("M") || userInput.isEmpty()) {
-        game.getPlayers().get(0).getHands().get(0).setBet(Blackjack.TABLE_MINIMUM);
-        game.getPlayers().get(0).setPlayerBank(game.getPlayers().get(0).getPlayerBank() - Blackjack.TABLE_MINIMUM);
+        game.getPlayers().get(0).getHands().get(0).setBet(Blackjack.sTableMinimumBet);
+        game.getPlayers().get(0).setPlayerBank(game.getPlayers().get(0).getPlayerBank() - Blackjack.sTableMinimumBet);
         updateBankLabel();
         isValidChoice = true;
       }

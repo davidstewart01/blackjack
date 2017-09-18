@@ -4,8 +4,11 @@ import card.Shoe;
 import player.BlackjackDealer;
 import player.BlackjackPlayer;
 
+import java.io.FileInputStream;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Properties;
 
 /**
  * Class that represents a game of blackjack.
@@ -17,7 +20,7 @@ public class Blackjack {
   //---------------------------------------------------------------------
   // CONSTANTS
   //---------------------------------------------------------------------
-
+  
   // Game outcome messages.
 
   /** The message associated withe a draw between the player and dealer. */
@@ -44,11 +47,17 @@ public class Blackjack {
   /** The message associated with the dealer winning. */
   public static final String GAME_OUTCOME_PLAYER_WINS = "Player Wins";
 
-  // Game defaults.
-
-  /** The default table minimum bet */
-  public static final double TABLE_MINIMUM = 10;
-
+  
+  //---------------------------------------------------------------------
+  // STATIC MEMBERS
+  //---------------------------------------------------------------------
+  
+  /** The location of the properties file that holds the game parameters. */
+  public static String sPropertiesFileLocation = null;
+  
+  /** The minimum bet allowed at the table. */
+  public static double sTableMinimumBet = 0.0d;
+  
   //---------------------------------------------------------------------
   // CONSTRUCTORS
   //---------------------------------------------------------------------
@@ -57,11 +66,20 @@ public class Blackjack {
    * Constructor that initialises dealer and players for game.
    */
   public Blackjack() {
+    sPropertiesFileLocation = getClass().getResource("/game_parameters.properties").getPath();
+    Properties properties = getProperties();
+    
     // TODO: Add players in a loop. number of from properties file?
     getPlayers().add(new BlackjackPlayer());
     setPlayers(getPlayers());
 
-    setShoe(new Shoe(1, true));
+    // Initialise the shoe.
+    setShoe(new Shoe(
+      Integer.parseInt(properties.getProperty("number_of_decks_in_shoe")),
+      Boolean.getBoolean(properties.getProperty("shuffle_shoe"))));
+    
+    // Initialise the table minimum bet.
+    sTableMinimumBet = Double.parseDouble(properties.getProperty("number_of_decks_in_shoe"));
   }
 
   //---------------------------------------------------------------------
@@ -133,7 +151,28 @@ public class Blackjack {
   //---------------------------------------------------------------------
   // METHODS
   //---------------------------------------------------------------------
+  
+  /**
+   * Load the game's properties file.
+   *
+   * @return The game's properties file.
+   */
+  public static Properties getProperties() {
 
+    // Load properties file.
+    Properties properties = new Properties();
+    
+    try {
+      properties.load(new FileInputStream(sPropertiesFileLocation));
+      return properties;
+    }
+    catch (IOException ioe) {
+      System.out.println("Problem loading properties file!");
+    }
+    
+    return null;
+  }
+  
   /**
    * This method contains the logic for deciding who won the game and updates
    * the player's bank accordingly.
