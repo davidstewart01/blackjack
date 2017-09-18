@@ -30,22 +30,22 @@ public class Blackjack {
   public static final String GAME_OUTCOME_DEALER_BLACKJACK = "Dealer has Blackjack";
 
   /** The message associated when the player has blackjack. */
-  public static final String GAME_OUTCOME_PLAYER_BLACKJACK = "Player has Blackjack";
+  public static final String GAME_OUTCOME_PLAYER_BLACKJACK = "% has Blackjack";
 
   /** The message associated when the dealer is bust but the player isn't. */
   public static final String GAME_OUTCOME_DEALER_BUST = "Dealer Bust, Player wins";
 
   /** The message associated when the player is bust but the dealer isn't. */
-  public static final String GAME_OUTCOME_PLAYER_BUST = "Player Bust, Dealer wins";
+  public static final String GAME_OUTCOME_PLAYER_BUST = "% Bust, Dealer wins";
 
   /** The message associated with a draw between the player and dealer. */
-  public static final String GAME_OUTCOME_PLAYER_AND_DEALER_BUST = "Player and Dealer are Bust";
+  public static final String GAME_OUTCOME_PLAYER_AND_DEALER_BUST = "% and Dealer are Bust";
 
   /** The message associated with the dealer winning. */
   public static final String GAME_OUTCOME_DEALER_WINS = "Dealer Wins";
 
   /** The message associated with the dealer winning. */
-  public static final String GAME_OUTCOME_PLAYER_WINS = "Player Wins";
+  public static final String GAME_OUTCOME_PLAYER_WINS = "% Wins";
 
   
   //---------------------------------------------------------------------
@@ -70,7 +70,7 @@ public class Blackjack {
     Properties properties = getProperties();
     
     // TODO: Add players in a loop. number of from properties file?
-    getPlayers().add(new BlackjackPlayer());
+    getPlayers().add(new BlackjackPlayer("Paul"));
     setPlayers(getPlayers());
 
     // Initialise the shoe.
@@ -204,7 +204,7 @@ public class Blackjack {
       getPlayers().get(0).setPlayerBank(
         getPlayers().get(0).getPlayerBank() + (getPlayers().get(0).getHands().get(0).getBet() * 2.5));
 
-      return GAME_OUTCOME_PLAYER_BLACKJACK;
+      return GAME_OUTCOME_PLAYER_BLACKJACK.replace("%", getPlayers().get(0).getUserName());
     }
     else if (getDealer().getCardTotal() > 21 && getPlayers().get(0).getCardTotal() <= 21) {
 
@@ -215,11 +215,11 @@ public class Blackjack {
       return GAME_OUTCOME_DEALER_BUST;
     }
     else if (getPlayers().get(0).getCardTotal() > 21 && getDealer().getCardTotal() <= 21) {
-      return GAME_OUTCOME_PLAYER_BUST;
+      return GAME_OUTCOME_PLAYER_BUST.replace("%", getPlayers().get(0).getUserName());
     }
 
     else if (getPlayers().get(0).getCardTotal() > 21 && getDealer().getCardTotal() > 21) {
-      return GAME_OUTCOME_PLAYER_AND_DEALER_BUST;
+      return GAME_OUTCOME_PLAYER_AND_DEALER_BUST.replace("%", getPlayers().get(0).getUserName());
     }
     else {
       if (getDealer().getCardTotal() > getPlayers().get(0).getCardTotal()) {
@@ -231,7 +231,7 @@ public class Blackjack {
         getPlayers().get(0).setPlayerBank(
           getPlayers().get(0).getPlayerBank() + (getPlayers().get(0).getHands().get(0).getBet() * 2));
 
-        return GAME_OUTCOME_PLAYER_WINS;
+        return GAME_OUTCOME_PLAYER_WINS.replace("%", getPlayers().get(0).getUserName());
       }
       else {
         getPlayers().get(0).setPlayerBank(
