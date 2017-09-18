@@ -385,8 +385,7 @@ public class BlackjackGUI extends JPanel {
     while(!isGameFinished) {
       if (!game.getDealer().getHands().get(0).isSticking() && !game.getDealer().getHands().get(0).isBust()) {
         if (game.getDealer().getCardTotal() < 17) {
-          Card card = game.getDealer().getShoe().removeLast();
-          game.getDealer().hit(card);
+          Card card = game.getDealer().dealCard(game.getDealer());
           dealercardhit = new JLabel(card.getCardImage());
           dealerCardPanel.add(dealercardhit);
           playerCardPanel.repaint();
