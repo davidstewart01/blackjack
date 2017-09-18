@@ -14,7 +14,7 @@ import java.util.*;
  *
  *  @author David Stewart
  */
-public class BlackjackGUI extends JPanel {
+public class BlackjackGUI {
   
   //-------------------------------------------------------------
   // CONSTANTS
@@ -104,6 +104,9 @@ public class BlackjackGUI extends JPanel {
   /** This will represent the player's second card. */
   private JLabel playerInitialCard2 = null;
   
+  private final static boolean shouldFill = true;
+  private final static boolean RIGHT_TO_LEFT = false;
+  
   //-------------------------------------------------------------
   // MEMBERS
   //-------------------------------------------------------------
@@ -116,52 +119,86 @@ public class BlackjackGUI extends JPanel {
   //-------------------------------------------------------------
   
   /**
-   * Show the game.
+   * Add all of the game components to the frame.
+   *
+   * @param pPane
+   *   The container to add the components to.
    */
-    public void initialiseAndDisplayGame() {
-      topPanel.setBackground(new Color(0, 122, 0));
-      dealerCardPanel.setBackground(new Color(0, 122, 0));
-      playerCardPanel.setBackground(new Color(0, 122, 0));
+  public void addComponentsToPane(Container pPane) {
+    if (RIGHT_TO_LEFT) {
+      pPane.setComponentOrientation(ComponentOrientation.RIGHT_TO_LEFT);
+    }
   
-      topPanel.setLayout(new FlowLayout());
-  
-      statusTextBox.setText(" ");
-      statusTextBox.setFont(new java.awt.Font("Helvetica Bold", 1, 20));
-      statusTextBox.setVisible(false);
-  
-      createGameButtons();
-  
-      dealerLabel.setText("  Dealer:  ");
-      playerLabel.setText("  Player:  ");
-      updateBankLabel();
-  
-      topPanel.add(statusTextBox);
-      topPanel.add(dealButton);
-      topPanel.add(hitButton);
-      topPanel.add(stickButton);
-      topPanel.add(doubleDownButton);
-      topPanel.add(playAgainButton);
-  
-      playerCardPanel.add(playerLabel);
-      dealerCardPanel.add(dealerLabel);
-  
-      setLayout(new BorderLayout());
-  
-      add(topPanel,BorderLayout.NORTH);
-      add(dealerCardPanel,BorderLayout.CENTER);
-      add(playerCardPanel,BorderLayout.SOUTH);
-      
-      JFrame myFrame = new JFrame("BlackJack");
-      myFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-      myFrame.setContentPane(this);
-      myFrame.setPreferredSize(new Dimension(800,650));
-      myFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+    pPane.setLayout(new GridBagLayout());
+    GridBagConstraints constraints = new GridBagConstraints();
+    constraints.fill = GridBagConstraints.HORIZONTAL;
+    
+    topPanel.setBackground(new Color(0, 122, 0));
+    dealerCardPanel.setBackground(new Color(0, 122, 0));
+    playerCardPanel.setBackground(new Color(0, 122, 0));
 
-      //Display the window.
-      myFrame.pack();
-      myFrame.setVisible(true);
-      myFrame.setLocationRelativeTo(null);
-    }//end display
+    topPanel.setLayout(new FlowLayout());
+
+    statusTextBox.setText(" ");
+    statusTextBox.setFont(new java.awt.Font("Helvetica Bold", 1, 20));
+    statusTextBox.setVisible(false);
+
+    createGameButtons();
+
+    dealerLabel.setText("  Dealer:  ");
+    playerLabel.setText("  Player:  ");
+    
+    updateBankLabel();
+
+    topPanel.add(statusTextBox);
+    topPanel.add(dealButton);
+    topPanel.add(hitButton);
+    topPanel.add(stickButton);
+    topPanel.add(doubleDownButton);
+    topPanel.add(playAgainButton);
+
+    playerCardPanel.add(playerLabel);
+    dealerCardPanel.add(dealerLabel);
+  
+    // TOP PANEL
+    topPanel.setBackground(new Color(0, 122, 0));
+    topPanel.setLayout(new FlowLayout());
+    constraints.fill = GridBagConstraints.HORIZONTAL;
+    constraints.gridx = 0;
+    constraints.gridy = 0;
+    pPane.add(topPanel, constraints);
+  
+    // DEALER PANEL
+    dealerCardPanel.setBackground(new Color(0, 122, 0));
+    dealerCardPanel.setLayout(new FlowLayout());
+    constraints.insets = new Insets(10,0,0,0);  //top padding
+    constraints.fill = GridBagConstraints.HORIZONTAL;
+    constraints.weightx = 0.5;
+    constraints.gridx = 0;
+    constraints.gridy = 1;
+    pPane.add(dealerCardPanel, constraints);
+  
+    // PLAYER CARD PANEL
+    playerCardPanel.setBackground(new Color(0, 122, 0));
+    playerCardPanel.setLayout(new FlowLayout());
+    constraints.insets = new Insets(80,0,0,0);  //top padding
+    constraints.fill = GridBagConstraints.HORIZONTAL;
+    constraints.weightx = 0.5;
+    constraints.gridx = 0;
+    constraints.gridy = 2;
+    pPane.add(playerCardPanel, constraints);
+  
+    // BANK PANEL
+    playerBankPanel.setBackground(new Color(0, 122, 0));
+    playerBankPanel.setLayout(new FlowLayout());
+    constraints.insets = new Insets(20,0,0,0);  //top padding
+    constraints.fill = GridBagConstraints.HORIZONTAL;
+    constraints.weightx = 0.5;
+    constraints.gridx = 0;
+    constraints.gridy = 6;
+    pPane.add(playerBankPanel, constraints);
+   
+  }//end display
 
   /**
    * Deal out the dealer and player cards.
@@ -204,10 +241,6 @@ public class BlackjackGUI extends JPanel {
 
       dealersTurn();
     }
-
-    add(dealerCardPanel, BorderLayout.CENTER);
-    add(playerCardPanel, BorderLayout.SOUTH);
-    add(playerBankPanel, BorderLayout.EAST);
   }
   
   /**
@@ -309,7 +342,7 @@ public class BlackjackGUI extends JPanel {
           isValidChoice = true;
         }
         catch (NumberFormatException nfe) {
-          JOptionPane.showMessageDialog(this.getParent(), "Enter \"M\" for minimum bet or a numerical value.");
+          JOptionPane.showMessageDialog(null, "Enter \"M\" for minimum bet or a numerical value.");
         }
       }
     }
@@ -471,5 +504,38 @@ public class BlackjackGUI extends JPanel {
       }
     }
   }
+  
+  /**
+   * Create the GUI and show it.  For thread safety, this method should be invoked from the
+   * event-dispatching thread.
+   */
+  private void createAndShowGUI() {
+    JFrame frame = new JFrame("Blackjack");
+    frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+    frame.getContentPane().setBackground(new Color(0, 122, 0));
+    frame.setPreferredSize(new Dimension(800,450));
 
+    addComponentsToPane(frame.getContentPane());
+    
+    frame.pack();
+    frame.setVisible(true);
+    frame.setLocationRelativeTo(null);
+  }
+  
+  /**
+   * Main method.
+   *
+   * @param args
+   */
+  public static void main(String[] args) {
+    BlackjackGUI blackjack = new BlackjackGUI();
+    
+    //Schedule a job for the event-dispatching thread:
+    //creating and showing this application's GUI.
+    javax.swing.SwingUtilities.invokeLater(new Runnable() {
+      public void run() {
+        blackjack.createAndShowGUI();
+      }
+    });
+  }
 }
