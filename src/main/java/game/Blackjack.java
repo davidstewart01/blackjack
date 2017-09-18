@@ -237,7 +237,7 @@ public class Blackjack {
         getPlayers().get(0).setPlayerBank(
           getPlayers().get(0).getPlayerBank() + (getPlayers().get(0).getHands().get(0).getBet()));
 
-        return GAME_OUTCOME_PLAYER_WINS;
+        return GAME_OUTCOME_PUSH;
       }
     }
   }
