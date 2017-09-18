@@ -53,7 +53,7 @@ public class Blackjack {
   //---------------------------------------------------------------------
 
   /**
-   * Constructor
+   * Constructor that initialises dealer and players for game.
    */
   public Blackjack() {
     // TODO: Add players in a loop. number of from properties file?
@@ -62,7 +62,7 @@ public class Blackjack {
   }
 
   //---------------------------------------------------------------------
-  // MEMBERS
+  // PROPERTIES
   //---------------------------------------------------------------------
 
   //--------------------------------------------------
@@ -106,6 +106,10 @@ public class Blackjack {
   public BlackjackDealer getDealer() {
     return mDealer;
   }
+
+  //---------------------------------------------------------------------
+  // METHODS
+  //---------------------------------------------------------------------
 
   /**
    * This method contains the logic for deciding who won the game and updates
