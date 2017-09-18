@@ -72,11 +72,11 @@ public class Blackjack {
     // TODO: Add players in a loop. number of from properties file?
     getPlayers().add(new BlackjackPlayer("Paul"));
     setPlayers(getPlayers());
-
+    
     // Initialise the shoe.
     setShoe(new Shoe(
       Integer.parseInt(properties.getProperty("number_of_decks_in_shoe")),
-      Boolean.getBoolean(properties.getProperty("shuffle_shoe"))));
+      Boolean.parseBoolean(properties.getProperty("shuffle_shoe"))));
     
     // Initialise the table minimum bet.
     sTableMinimumBet = Double.parseDouble(properties.getProperty("number_of_decks_in_shoe"));
