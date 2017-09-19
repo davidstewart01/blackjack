@@ -374,8 +374,6 @@ public class BlackjackGUI {
    * Switches to the dealer.
    */
   public void dealersTurn() {
-    dealerCardPanel.remove(dealerInitialCard0);
-    dealerCardPanel.add(dealerInitialCard1);
     dealerCardPanel.removeAll();
     dealerCardPanel.add(dealerLabel);
     dealerLabel.setText(dealerLabel.getText() + ": " + game.getDealer().getCardTotal());

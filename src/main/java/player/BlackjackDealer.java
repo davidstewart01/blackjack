@@ -59,6 +59,9 @@ public class BlackjackDealer extends BlackjackPlayer {
    * Deal all cards to players and dealer for a new game of blackjack.
    */
   public void dealNewGame(List<BlackjackPlayer> pPlayers, Shoe pShoe) {
+
+    // TODO: When shoe reaches a certain size, re-deck it so we don't run out of cards. What happens in real blackjack?
+
     // TODO: deal multiple players.
     pPlayers.get(0).getHands().add(new Hand());
     this.getHands().add(new Hand());
@@ -79,10 +82,12 @@ public class BlackjackDealer extends BlackjackPlayer {
    *   The card that was dealt to the player..
    */
   public Card dealCard(BlackjackPlayer pPlayer, Shoe pShoe) {
+
+    // TODO: When shoe reaches a certain size, re-deck it so we don't run out of cards. What happens in real blackjack?
+
     Card card = pShoe.removeLast();
     pPlayer.hit(card);
 
     return card;
-
   }
 }
