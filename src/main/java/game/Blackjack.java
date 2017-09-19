@@ -1,5 +1,6 @@
 package game;
 
+import card.Shoe;
 import player.BlackjackDealer;
 import player.BlackjackPlayer;
 
@@ -58,7 +59,9 @@ public class Blackjack {
   public Blackjack() {
     // TODO: Add players in a loop. number of from properties file?
     getPlayers().add(new BlackjackPlayer());
-    getDealer().setPlayers(getPlayers());
+    setPlayers(getPlayers());
+
+    setShoe(new Shoe(1, true));
   }
 
   //---------------------------------------------------------------------
@@ -107,6 +110,26 @@ public class Blackjack {
     return mDealer;
   }
 
+  //---------------------------------------------------
+  // property: shoe
+  //---------------------------------------------------
+  Shoe mShoe = null;
+
+  /**
+   * @param pShoe
+   *
+   */
+  public void setShoe(Shoe pShoe) {
+    mShoe = pShoe;
+  }
+
+  /**
+   * @return
+   *
+   */
+  public Shoe getShoe() {
+    return mShoe;
+  }
   //---------------------------------------------------------------------
   // METHODS
   //---------------------------------------------------------------------

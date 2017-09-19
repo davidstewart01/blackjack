@@ -30,7 +30,7 @@ public class BlackjackConsole {
    */
   public void start() {
     game = new Blackjack();
-    game.getDealer().dealNewGame();
+    game.getDealer().dealNewGame(game.getPlayers(), game.getShoe());
 
     System.out.println("Starting game...");
 
@@ -56,14 +56,14 @@ public class BlackjackConsole {
           String userChoice = captureUserChoice();
 
           if (userChoice.equalsIgnoreCase("H")) {
-            game.getPlayers().get(0).hit(game.getDealer().getShoe().removeLast());
+            game.getPlayers().get(0).hit(game.getShoe().removeLast());
           }
           else if (userChoice.equalsIgnoreCase("S")) {
             game.getPlayers().get(0).getHands().get(0).setSticking(true);
           }
           else if (userChoice.equalsIgnoreCase("D")) {
             game.getPlayers().get(0).doubleDown(game.getPlayers().get(0).getHands().get(0));
-            game.getPlayers().get(0).hit(game.getDealer().getShoe().removeLast());
+            game.getPlayers().get(0).hit(game.getShoe().removeLast());
             game.getPlayers().get(0).getHands().get(0).setSticking(true);
           }
           else {
@@ -86,7 +86,7 @@ public class BlackjackConsole {
       else {
         if (!game.getDealer().getHands().get(0).isSticking() && !game.getDealer().getHands().get(0).isBust()) {
           if (game.getDealer().getCardTotal() < 17) {
-            game.getDealer().hit(game.getDealer().getShoe().removeLast());
+            game.getDealer().hit(game.getShoe().removeLast());
           }
           else {
             game.getDealer().getHands().get(0).setSticking(true);

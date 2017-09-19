@@ -182,7 +182,7 @@ public class BlackjackGUI extends JPanel {
    * Deal out the dealer and player cards.
    */
   public void deal() {
-    game.getDealer().dealNewGame();
+    game.getDealer().dealNewGame(game.getPlayers(), game.getShoe());
 
     placeBet();
 
@@ -262,7 +262,7 @@ public class BlackjackGUI extends JPanel {
   public void hit() {
     doubleDownButton.setEnabled(false);
 
-    Card hitCard = game.getDealer().dealCard(game.getPlayers().get(0));
+    Card hitCard = game.getDealer().dealCard(game.getPlayers().get(0), game.getShoe());
 
     JLabel hitCardImage = new JLabel(hitCard.getCardImage());
     playerCardPanel.add(hitCardImage);
@@ -385,7 +385,7 @@ public class BlackjackGUI extends JPanel {
     while(!isGameFinished) {
       if (!game.getDealer().getHands().get(0).isSticking() && !game.getDealer().getHands().get(0).isBust()) {
         if (game.getDealer().getCardTotal() < 17) {
-          Card card = game.getDealer().dealCard(game.getDealer());
+          Card card = game.getDealer().dealCard(game.getDealer(), game.getShoe());
           dealercardhit = new JLabel(card.getCardImage());
           dealerCardPanel.add(dealercardhit);
           playerCardPanel.repaint();
