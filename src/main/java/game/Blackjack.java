@@ -20,8 +20,10 @@ public class Blackjack {
   //---------------------------------------------------------------------
   // CONSTANTS
   //---------------------------------------------------------------------
-  
+
+  //-------------------------------------
   // Game outcome messages.
+  //-------------------------------------
 
   /** The message associated withe a draw between the player and dealer. */
   public static final String GAME_OUTCOME_PUSH = "Push";
@@ -29,25 +31,52 @@ public class Blackjack {
   /** The message associated when the dealer has blackjack. */
   public static final String GAME_OUTCOME_DEALER_BLACKJACK = "Dealer has Blackjack";
 
-  /** The message associated when the player has blackjack. */
+  /**
+   * The message associated when the player has blackjack. The percent symbol will be
+   * replaced with player's name.
+   **/
   public static final String GAME_OUTCOME_PLAYER_BLACKJACK = "% has Blackjack";
 
-  /** The message associated when the dealer is bust but the player isn't. */
-  public static final String GAME_OUTCOME_DEALER_BUST = "Dealer Bust, Player wins";
+  /**
+   * The message associated when the dealer is bust but the player isn't. The percent symbol
+   * will be replaced with player's name.
+   **/
+  public static final String GAME_OUTCOME_DEALER_BUST = "Dealer Bust, % wins";
 
-  /** The message associated when the player is bust but the dealer isn't. */
+  /**
+   * The message associated when the player is bust but the dealer isn't. The percent symbol
+   * will be replaced with player's name.
+   **/
   public static final String GAME_OUTCOME_PLAYER_BUST = "% Bust, Dealer wins";
 
-  /** The message associated with a draw between the player and dealer. */
+  /**
+   * The message associated with a draw between the player and dealer.  The percent symbol will
+   * be replaced with player's name.
+   **/
   public static final String GAME_OUTCOME_PLAYER_AND_DEALER_BUST = "% and Dealer are Bust";
 
   /** The message associated with the dealer winning. */
   public static final String GAME_OUTCOME_DEALER_WINS = "Dealer Wins";
 
-  /** The message associated with the dealer winning. */
+  /** The message associated with the dealer winning. The percent symbol will be replaced with player's name. */
   public static final String GAME_OUTCOME_PLAYER_WINS = "% Wins";
 
-  
+  //-------------------------------------
+  // Properties file resources.
+  //-------------------------------------
+
+  /** The location of the game parameters properties file. */
+  public static final String GAME_PARAMETERS_FILE_RESOURCE_LOCATION = "/game_parameters.properties";
+
+  /** The resource that defines the number of decks that should go into a shoe. */
+  public static final String NUMBER_OF_DECKS_IN_SHOE_RESOURCE = "number_of_decks_in_shoe";
+
+  /** The resource that defines whether the shoe should be shuffled or not. */
+  public static final String SHUFFLE_SHOE_RESOURCE ="shuffle_shoe";
+
+  /** The resource that defines whether the shoe should be shuffled or not. */
+  public static final String TABLE_MINIMUM_BET_RESOURCE = "table_minimum_bet";
+
   //---------------------------------------------------------------------
   // STATIC MEMBERS
   //---------------------------------------------------------------------
@@ -66,7 +95,7 @@ public class Blackjack {
    * Constructor that initialises dealer and players for game.
    */
   public Blackjack() {
-    sPropertiesFileLocation = getClass().getResource("/game_parameters.properties").getPath();
+    sPropertiesFileLocation = getClass().getResource(GAME_PARAMETERS_FILE_RESOURCE_LOCATION).getPath();
     Properties properties = getProperties();
     
     // TODO: Add players in a loop. number of from properties file?
@@ -75,11 +104,12 @@ public class Blackjack {
     
     // Initialise the shoe.
     setShoe(new Shoe(
-      Integer.parseInt(properties.getProperty("number_of_decks_in_shoe")),
-      Boolean.parseBoolean(properties.getProperty("shuffle_shoe"))));
-    
+      Integer.parseInt(properties.getProperty(NUMBER_OF_DECKS_IN_SHOE_RESOURCE)),
+      Boolean.parseBoolean(properties.getProperty(SHUFFLE_SHOE_RESOURCE))));
+
     // Initialise the table minimum bet.
-    sTableMinimumBet = Double.parseDouble(properties.getProperty("number_of_decks_in_shoe"));
+    sTableMinimumBet = Double.parseDouble(properties.getProperty(TABLE_MINIMUM_BET_RESOURCE));
+
   }
 
   //---------------------------------------------------------------------
@@ -212,7 +242,7 @@ public class Blackjack {
       getPlayers().get(0).setPlayerBank(
         getPlayers().get(0).getPlayerBank() + (getPlayers().get(0).getHands().get(0).getBet() * 2));
 
-      return GAME_OUTCOME_DEALER_BUST;
+      return GAME_OUTCOME_DEALER_BUST.replace("%", getPlayers().get(0).getUserName());
     }
     else if (getPlayers().get(0).getCardTotal() > 21 && getDealer().getCardTotal() <= 21) {
       return GAME_OUTCOME_PLAYER_BUST.replace("%", getPlayers().get(0).getUserName());

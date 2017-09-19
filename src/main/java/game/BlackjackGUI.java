@@ -7,6 +7,8 @@ import player.BlackjackPlayer;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
+import java.text.DecimalFormat;
+import java.text.NumberFormat;
 import java.util.*;
 
 /**
@@ -19,7 +21,10 @@ public class BlackjackGUI {
   //-------------------------------------------------------------
   // CONSTANTS
   //-------------------------------------------------------------
-  
+
+  /** The name that will be the title of the game. */
+  public static final String GAME_TITLE = "Blackjack";
+
   //-------------------------------------------------
   // Game Panels
   //-------------------------------------------------
@@ -76,13 +81,9 @@ public class BlackjackGUI {
   //-------------------------------------------------
   
   private static final String DEAL_ACTION_COMMAND = "DEAL";
-  
   private static final String STICK_ACTION_COMMAND = "STICK";
-  
   private static final String DOUBLE_DOWN_ACTION_COMMAND = "DOUBLE_DOWN";
-  
   private static final String HIT_ACTION_COMMAND = "HIT";
-  
   private static final String PLAY_AGAIN_ACTION_COMMAND = "PLAY_AGAIN";
 
   //-------------------------------------------------
@@ -103,10 +104,10 @@ public class BlackjackGUI {
   
   /** This will represent the player's second card. */
   private JLabel playerInitialCard2 = null;
-  
-  private final static boolean shouldFill = true;
-  private final static boolean RIGHT_TO_LEFT = false;
-  
+
+  /** The colour that will be used for the table. */
+  private Color tableColour = new Color(0, 122, 0);
+
   //-------------------------------------------------------------
   // MEMBERS
   //-------------------------------------------------------------
@@ -125,43 +126,28 @@ public class BlackjackGUI {
    *   The container to add the components to.
    */
   public void addComponentsToPane(Container pPane) {
-    if (RIGHT_TO_LEFT) {
-      pPane.setComponentOrientation(ComponentOrientation.RIGHT_TO_LEFT);
-    }
-  
     pPane.setLayout(new GridBagLayout());
     GridBagConstraints constraints = new GridBagConstraints();
     constraints.fill = GridBagConstraints.HORIZONTAL;
-    
-    topPanel.setBackground(new Color(0, 122, 0));
-    dealerCardPanel.setBackground(new Color(0, 122, 0));
-    playerCardPanel.setBackground(new Color(0, 122, 0));
 
-    topPanel.setLayout(new FlowLayout());
-
+    // STATUS BOX.
     statusTextBox.setText(" ");
     statusTextBox.setFont(new java.awt.Font("Helvetica Bold", 1, 20));
     statusTextBox.setVisible(false);
 
     createGameButtons();
-
-    dealerLabel.setText("  Dealer:  ");
-    playerLabel.setText("  Player:  ");
-    
     updateBankLabel();
 
+    // TOP PANEL.
+    topPanel.setBackground(tableColour);
+    topPanel.setLayout(new FlowLayout());
     topPanel.add(statusTextBox);
     topPanel.add(dealButton);
     topPanel.add(hitButton);
     topPanel.add(stickButton);
     topPanel.add(doubleDownButton);
     topPanel.add(playAgainButton);
-
-    playerCardPanel.add(playerLabel);
-    dealerCardPanel.add(dealerLabel);
-  
-    // TOP PANEL
-    topPanel.setBackground(new Color(0, 122, 0));
+    topPanel.setBackground(tableColour);
     topPanel.setLayout(new FlowLayout());
     constraints.fill = GridBagConstraints.HORIZONTAL;
     constraints.gridx = 0;
@@ -169,7 +155,9 @@ public class BlackjackGUI {
     pPane.add(topPanel, constraints);
   
     // DEALER PANEL
-    dealerCardPanel.setBackground(new Color(0, 122, 0));
+    dealerCardPanel.setBackground(tableColour);
+    dealerCardPanel.add(dealerLabel);
+    dealerCardPanel.setBackground(tableColour);
     dealerCardPanel.setLayout(new FlowLayout());
     constraints.insets = new Insets(10,0,0,0);  //top padding
     constraints.fill = GridBagConstraints.HORIZONTAL;
@@ -179,7 +167,9 @@ public class BlackjackGUI {
     pPane.add(dealerCardPanel, constraints);
   
     // PLAYER CARD PANEL
-    playerCardPanel.setBackground(new Color(0, 122, 0));
+    playerCardPanel.setBackground(tableColour);
+    playerCardPanel.add(playerLabel);
+    playerCardPanel.setBackground(tableColour);
     playerCardPanel.setLayout(new FlowLayout());
     constraints.insets = new Insets(80,0,0,0);  //top padding
     constraints.fill = GridBagConstraints.HORIZONTAL;
@@ -189,7 +179,7 @@ public class BlackjackGUI {
     pPane.add(playerCardPanel, constraints);
   
     // BANK PANEL
-    playerBankPanel.setBackground(new Color(0, 122, 0));
+    playerBankPanel.setBackground(tableColour);
     playerBankPanel.setLayout(new FlowLayout());
     constraints.insets = new Insets(20,0,0,0);  //top padding
     constraints.fill = GridBagConstraints.HORIZONTAL;
@@ -197,7 +187,11 @@ public class BlackjackGUI {
     constraints.gridx = 0;
     constraints.gridy = 6;
     pPane.add(playerBankPanel, constraints);
-   
+
+    // LABELS.
+    dealerLabel.setText("  Dealer:  ");
+    playerLabel.setText("  Player:  ");
+
   }//end display
 
   /**
@@ -351,7 +345,7 @@ public class BlackjackGUI {
   /**
    * Reset the GUI for a new game. This doesn't reset the bank.
    */
-  public void playagain() {
+  public void playAgain() {
     dealerLabel.setText("Dealer: ");
     playerLabel.setText("Player: ");
     statusTextBox.setText("");
@@ -448,7 +442,8 @@ public class BlackjackGUI {
    * Convenience method for updating the player's bank status.
    */
   private void updateBankLabel() {
-    playerBankLabel.setText("  Bank:  " + game.getPlayers().get(0).getPlayerBank());
+    NumberFormat formatter = new DecimalFormat("#0.00");
+    playerBankLabel.setText("  Bank:  " + formatter.format(game.getPlayers().get(0).getPlayerBank()));
   }
   
   /**
@@ -500,7 +495,7 @@ public class BlackjackGUI {
           doubleDown();
           break;
         case PLAY_AGAIN_ACTION_COMMAND:
-          playagain();
+          playAgain();
       }
     }
   }
@@ -510,10 +505,10 @@ public class BlackjackGUI {
    * event-dispatching thread.
    */
   private void createAndShowGUI() {
-    JFrame frame = new JFrame("Blackjack");
+    JFrame frame = new JFrame(GAME_TITLE);
     frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-    frame.getContentPane().setBackground(new Color(0, 122, 0));
-    frame.setPreferredSize(new Dimension(800,450));
+    frame.getContentPane().setBackground(tableColour);
+    frame.setPreferredSize(new Dimension(800, 450));
 
     addComponentsToPane(frame.getContentPane());
     
