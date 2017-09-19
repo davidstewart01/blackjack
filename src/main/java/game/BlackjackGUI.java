@@ -189,8 +189,8 @@ public class BlackjackGUI {
     pPane.add(playerBankPanel, constraints);
 
     // LABELS.
-    dealerLabel.setText("  Dealer:  ");
-    playerLabel.setText("  Player:  ");
+    dealerLabel.setText("Dealer:  ");
+    playerLabel.setText("Player:  ");
 
   }//end display
 
@@ -217,8 +217,8 @@ public class BlackjackGUI {
     playerCardPanel.add(playerInitialCard1);
     playerCardPanel.add(playerInitialCard2);
 
-    dealerLabel.setText("  Dealer:  " + game.getDealer().getCardTotal());
-    playerLabel.setText("  Player:  " + game.getPlayers().get(0).getCardTotal());
+    dealerLabel.setText("Dealer:  " + game.getDealer().getCardTotal());
+    playerLabel.setText("Player:  " + game.getPlayers().get(0).getCardTotal());
 
     hitButton.setEnabled(true);
     stickButton.setEnabled(true);
@@ -291,7 +291,7 @@ public class BlackjackGUI {
       dealersTurn();
     }
 
-    playerLabel.setText("  Player:   " + game.getPlayers().get(0).getCardTotal());
+    playerLabel.setText("Player:   " + game.getPlayers().get(0).getCardTotal());
   }
 
   /**
@@ -321,6 +321,10 @@ public class BlackjackGUI {
 
     while (!isValidChoice) {
       String userInput = JOptionPane.showInputDialog("How much do you want to bet? Press \"M\" for minimum bet.");
+
+      if (userInput == null) {
+        System.exit(1);
+      }
 
       if (userInput.equalsIgnoreCase("M") || userInput.isEmpty()) {
         game.getPlayers().get(0).getHands().get(0).setBet(Blackjack.sTableMinimumBet);
@@ -374,7 +378,7 @@ public class BlackjackGUI {
     dealerCardPanel.add(dealerInitialCard1);
     dealerCardPanel.removeAll();
     dealerCardPanel.add(dealerLabel);
-    dealerLabel.setText(" " + dealerLabel.getText() + ": " + game.getDealer().getCardTotal());
+    dealerLabel.setText(dealerLabel.getText() + ": " + game.getDealer().getCardTotal());
 
     //iterate through cards and re-display
     Card dealerHitCard = null;
@@ -443,33 +447,33 @@ public class BlackjackGUI {
    */
   private void updateBankLabel() {
     NumberFormat formatter = new DecimalFormat("#0.00");
-    playerBankLabel.setText("  Bank:  " + formatter.format(game.getPlayers().get(0).getPlayerBank()));
+    playerBankLabel.setText("Bank:  " + formatter.format(game.getPlayers().get(0).getPlayerBank()));
   }
   
   /**
    * Create and initialise all of the game's buttons.
    */
   protected void createGameButtons() {
-    dealButton.setText("  Deal");
+    dealButton.setText("Deal");
     dealButton.addActionListener(new GameButtonListener());
     dealButton.setActionCommand(DEAL_ACTION_COMMAND);
     
-    hitButton.setText("  Hit");
+    hitButton.setText("Hit");
     hitButton.addActionListener(new GameButtonListener());
     hitButton.setActionCommand(HIT_ACTION_COMMAND);
     hitButton.setEnabled(false);
     
-    stickButton.setText("  Stick");
+    stickButton.setText("Stick");
     stickButton.addActionListener(new GameButtonListener());
     stickButton.setActionCommand(STICK_ACTION_COMMAND);
     stickButton.setEnabled(false);
     
-    doubleDownButton.setText("  Double Down");
+    doubleDownButton.setText("Double Down");
     doubleDownButton.addActionListener(new GameButtonListener());
     doubleDownButton.setActionCommand(DOUBLE_DOWN_ACTION_COMMAND);
     doubleDownButton.setEnabled(false);
     
-    playAgainButton.setText("  Play Again");
+    playAgainButton.setText("Play Again");
     playAgainButton.addActionListener(new GameButtonListener());
     playAgainButton.setActionCommand(PLAY_AGAIN_ACTION_COMMAND);
     playAgainButton.setEnabled(false);
