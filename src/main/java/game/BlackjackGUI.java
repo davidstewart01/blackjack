@@ -105,6 +105,11 @@ public class BlackjackGUI {
   /** This will represent the player's second card. */
   private JLabel playerInitialCard2 = null;
 
+
+  // TODO: Remove this, just for testing...
+  JLabel shoeSizeDisplay = new JLabel();
+
+
   /** The colour that will be used for the table. */
   private Color tableColour = new Color(0, 122, 0);
 
@@ -147,6 +152,7 @@ public class BlackjackGUI {
     topPanel.add(stickButton);
     topPanel.add(doubleDownButton);
     topPanel.add(playAgainButton);
+    topPanel.add(shoeSizeDisplay);
     topPanel.setBackground(tableColour);
     topPanel.setLayout(new FlowLayout());
     constraints.fill = GridBagConstraints.HORIZONTAL;
@@ -199,6 +205,9 @@ public class BlackjackGUI {
    */
   public void deal() {
     game.getDealer().dealNewGame(game.getPlayers(), game.getShoe());
+
+    // TODO: Remove this, just for testing...
+    shoeSizeDisplay.setText("    Cards in shoe: " + Integer.toString(game.getShoe().size()));
 
     placeBet();
 
@@ -268,6 +277,9 @@ public class BlackjackGUI {
         }
       }
     }
+
+    // TODO: Remove this, just for testing...
+    shoeSizeDisplay.setText("    Cards in shoe: " + Integer.toString(game.getShoe().size()));
   }
   
   /**
@@ -277,6 +289,9 @@ public class BlackjackGUI {
     doubleDownButton.setEnabled(false);
 
     Card hitCard = game.getDealer().dealCard(game.getPlayers().get(0), game.getShoe());
+
+    // TODO: Remove this, just for testing...
+    shoeSizeDisplay.setText("    Cards in shoe: " + Integer.toString(game.getShoe().size()));
 
     JLabel hitCardImage = new JLabel(hitCard.getCardImage());
     playerCardPanel.add(hitCardImage);
@@ -404,6 +419,10 @@ public class BlackjackGUI {
       if (!game.getDealer().getHands().get(0).isSticking() && !game.getDealer().getHands().get(0).isBust()) {
         if (game.getDealer().getCardTotal() < 17) {
           Card card = game.getDealer().dealCard(game.getDealer(), game.getShoe());
+
+          // TODO: Remove this, just for testing...
+          shoeSizeDisplay.setText("    Cards in shoe: " + Integer.toString(game.getShoe().size()));
+
           dealerHitCardImage = new JLabel(card.getCardImage());
           dealerCardPanel.add(dealerHitCardImage);
           playerCardPanel.repaint();
