@@ -344,23 +344,6 @@ public class BlackjackGUI {
         System.exit(1);
       }
 
-      double bet = 0.0d;
-
-      try {
-        bet = Double.valueOf(userInput);
-      }
-      catch (NumberFormatException nfe) {
-        JOptionPane.showMessageDialog(null, "Enter \"M\" or a numerical value for minimum bet.");
-        continue;
-      }
-
-      if (bet < Blackjack.sTableMinimumBet) {
-        JOptionPane.showMessageDialog(null,
-          "The minimum bet for this table is " + FORMATTER.format(Blackjack.sTableMinimumBet));
-
-        continue;
-      }
-
       if (userInput.equalsIgnoreCase("M") || userInput.isEmpty()) {
         game.getPlayers().get(0).getHands().get(0).setBet(Blackjack.sTableMinimumBet);
         game.getPlayers().get(0).setPlayerBank(game.getPlayers().get(0).getPlayerBank() - Blackjack.sTableMinimumBet);
@@ -368,6 +351,23 @@ public class BlackjackGUI {
         isValidChoice = true;
       }
       else {
+        double bet = 0.0d;
+
+        try {
+          bet = Double.valueOf(userInput);
+        }
+        catch (NumberFormatException nfe) {
+          JOptionPane.showMessageDialog(null, "Enter \"M\" or a numerical value for minimum bet.");
+          continue;
+        }
+
+        if (bet < Blackjack.sTableMinimumBet) {
+          JOptionPane.showMessageDialog(null,
+            "The minimum bet for this table is " + FORMATTER.format(Blackjack.sTableMinimumBet));
+
+          continue;
+        }
+
         game.getPlayers().get(0).getHands().get(0).setBet(Double.parseDouble(userInput));
         game.getPlayers().get(0).setPlayerBank(game.getPlayers().get(0).getPlayerBank() - bet);
         updateBankLabel();
