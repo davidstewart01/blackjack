@@ -25,6 +25,9 @@ public class BlackjackGUI {
   /** The name that will be the title of the game. */
   public static final String GAME_TITLE = "Blackjack";
 
+  /** The format that the player's bank money will appear in. */
+  public static NumberFormat FORMATTER = new DecimalFormat("#0.00");
+
   //-------------------------------------------------
   // Game Panels
   //-------------------------------------------------
@@ -341,6 +344,23 @@ public class BlackjackGUI {
         System.exit(1);
       }
 
+      double bet = 0.0d;
+
+      try {
+        bet = Double.valueOf(userInput);
+      }
+      catch (NumberFormatException nfe) {
+        JOptionPane.showMessageDialog(null, "Enter \"M\" or a numerical value for minimum bet.");
+        continue;
+      }
+
+      if (bet < Blackjack.sTableMinimumBet) {
+        JOptionPane.showMessageDialog(null,
+          "The minimum bet for this table is " + FORMATTER.format(Blackjack.sTableMinimumBet));
+
+        continue;
+      }
+
       if (userInput.equalsIgnoreCase("M") || userInput.isEmpty()) {
         game.getPlayers().get(0).getHands().get(0).setBet(Blackjack.sTableMinimumBet);
         game.getPlayers().get(0).setPlayerBank(game.getPlayers().get(0).getPlayerBank() - Blackjack.sTableMinimumBet);
@@ -348,15 +368,10 @@ public class BlackjackGUI {
         isValidChoice = true;
       }
       else {
-        try {
-          game.getPlayers().get(0).getHands().get(0).setBet(Double.parseDouble(userInput));
-          game.getPlayers().get(0).setPlayerBank(game.getPlayers().get(0).getPlayerBank() - Double.valueOf(userInput));
-          updateBankLabel();
-          isValidChoice = true;
-        }
-        catch (NumberFormatException nfe) {
-          JOptionPane.showMessageDialog(null, "Enter \"M\" for minimum bet or a numerical value.");
-        }
+        game.getPlayers().get(0).getHands().get(0).setBet(Double.parseDouble(userInput));
+        game.getPlayers().get(0).setPlayerBank(game.getPlayers().get(0).getPlayerBank() - bet);
+        updateBankLabel();
+        isValidChoice = true;
       }
     }
   }
@@ -463,8 +478,7 @@ public class BlackjackGUI {
    * Convenience method for updating the player's bank status.
    */
   private void updateBankLabel() {
-    NumberFormat formatter = new DecimalFormat("#0.00");
-    playerBankLabel.setText("Bank:  " + formatter.format(game.getPlayers().get(0).getPlayerBank()));
+    playerBankLabel.setText("Bank:  " + FORMATTER.format(game.getPlayers().get(0).getPlayerBank()));
   }
   
   /**
