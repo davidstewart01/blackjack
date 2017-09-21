@@ -146,9 +146,6 @@ public class Shoe extends LinkedList<Card> {
     Random random = new Random();
     int reshuffleMarkerLocation = random.nextInt(upperBoundLocation - lowerBoundLocation) + lowerBoundLocation;
 
-    System.out.println("lower: " + lowerBoundLocation);
-    System.out.println("upper: " + upperBoundLocation);
-    System.out.println("marker: " + reshuffleMarkerLocation);
     setReshuffleMarkerLocation(reshuffleMarkerLocation);
   }
 }

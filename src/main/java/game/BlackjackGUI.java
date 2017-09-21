@@ -324,6 +324,11 @@ public class BlackjackGUI {
    * Double down on the player's bet.
    */
   public void doubleDown() {
+    if (game.getPlayers().get(0).getPlayerBank() < game.getPlayers().get(0).getHands().get(0).getBet()) {
+      JOptionPane.showMessageDialog(null, "You don't have sufficient funds to double down.");
+      return;
+    }
+
     doubleDownButton.setEnabled(false);
     game.getPlayers().get(0).doubleDown(game.getPlayers().get(0).getHands().get(0));
     updateBankLabel();
@@ -355,16 +360,15 @@ public class BlackjackGUI {
 
         try {
           bet = Double.valueOf(userInput);
+
+          if (bet > game.getPlayers().get(0).getPlayerBank()) {
+            JOptionPane.showMessageDialog(null, "You have entered an amount greater than you have in the bank.  "
+              + "Y'all ain't no High Rolla!!");
+            continue;
+          }
         }
         catch (NumberFormatException nfe) {
           JOptionPane.showMessageDialog(null, "Enter \"M\" or a numerical value for minimum bet.");
-          continue;
-        }
-
-        if (bet < Blackjack.sTableMinimumBet) {
-          JOptionPane.showMessageDialog(null,
-            "The minimum bet for this table is " + FORMATTER.format(Blackjack.sTableMinimumBet));
-
           continue;
         }
 
@@ -397,7 +401,13 @@ public class BlackjackGUI {
     dealButton.setEnabled(true);
     statusTextBox.setVisible(false);
 
-    deal();
+    if (game.getPlayers().get(0).getPlayerBank() < Blackjack.sTableMinimumBet) {
+      JOptionPane.showMessageDialog(null, "You don't have sufficient funds in your bank. Game finished!");
+      System.exit(1);
+    }
+    else {
+      deal();
+    }
   }
 
   /**
