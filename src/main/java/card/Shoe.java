@@ -1,9 +1,7 @@
 package card;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.LinkedList;
-import java.util.List;
+import java.math.BigDecimal;
+import java.util.*;
 import java.util.stream.IntStream;
 
 /**
@@ -67,7 +65,28 @@ public class Shoe extends LinkedList<Card> {
   public int getNumberOfDecksInShoe() {
     return mNumberOfDecksInShoe;
   }
-  
+
+  //-----------------------------------
+  // property: reshuffleMarkerLocation
+  //-----------------------------------
+  private int mReshuffleMarkerLocation= 0;
+
+  /**
+   * @param pReshuffleMarkerLocation
+   *   The location of the shoe's reshuffle marker.
+   */
+  public void setReshuffleMarkerLocation(int pReshuffleMarkerLocation) {
+    mReshuffleMarkerLocation = pReshuffleMarkerLocation;
+  }
+
+  /**
+   * @return
+   *   The location of the shoe's reshuffle marker.
+   */
+  public int getReshuffleMarkerLocation() {
+    return mReshuffleMarkerLocation;
+  }
+
   //---------------------------------------------------------------------
   // METHODS
   //---------------------------------------------------------------------
@@ -111,5 +130,25 @@ public class Shoe extends LinkedList<Card> {
   public void shuffle() {
     Collections.shuffle(this);
   }
-  
+
+  /**
+   * Calculates and sets the reshuffle marker location for the shoe.
+   *
+   * @param pLowerBoundPercentile
+   *   The lower bound percentile for the marker.
+   * @param pUpperBoundPercentile
+   *   The upper bound percentile for the marker.
+   */
+  public void insertReshuffleMarker(int pLowerBoundPercentile, int pUpperBoundPercentile){
+    int lowerBoundLocation = size() * pLowerBoundPercentile / 100;
+    int upperBoundLocation = size() * pUpperBoundPercentile / 100;
+
+    Random random = new Random();
+    int reshuffleMarkerLocation = random.nextInt(upperBoundLocation - lowerBoundLocation) + lowerBoundLocation;
+
+    System.out.println("lower: " + lowerBoundLocation);
+    System.out.println("upper: " + upperBoundLocation);
+    System.out.println("marker: " + reshuffleMarkerLocation);
+    setReshuffleMarkerLocation(reshuffleMarkerLocation);
+  }
 }

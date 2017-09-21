@@ -74,8 +74,16 @@ public class Blackjack {
   /** The resource that defines whether the shoe should be shuffled or not. */
   public static final String SHUFFLE_SHOE_RESOURCE ="shuffle_shoe";
 
-  /** The resource that defines whether the shoe should be shuffled or not. */
+  /** The resource that defines the table minimum bet value. */
   public static final String TABLE_MINIMUM_BET_RESOURCE = "table_minimum_bet";
+
+  /** The resource that defines the upper bound percentile of the reshuffle marker. */
+  public static final String RESHUFFLE_MARKER_UPPER_BOUND_PERCENTILE = "reshuffle_marker_upper_bound_percentile";
+
+  /** The resource that defines the upper bound percentile of the reshuffle marker. */
+  public static final String RESHUFFLE_MARKER_LOWER_BOUND_PERCENTILE = "reshuffle_marker_lower_bound_percentile";
+
+
 
   //---------------------------------------------------------------------
   // STATIC MEMBERS
@@ -86,6 +94,8 @@ public class Blackjack {
   
   /** The minimum bet allowed at the table. */
   public static double sTableMinimumBet = 0.0d;
+
+  public static Properties sProperties = null;
   
   //---------------------------------------------------------------------
   // CONSTRUCTORS
@@ -96,20 +106,16 @@ public class Blackjack {
    */
   public Blackjack() {
     sPropertiesFileLocation = getClass().getResource(GAME_PARAMETERS_FILE_RESOURCE_LOCATION).getPath();
-    Properties properties = getProperties();
+    sProperties = getProperties();
     
     // TODO: Add players in a loop. number of from properties file?
     getPlayers().add(new BlackjackPlayer("Paul"));
     setPlayers(getPlayers());
-    
-    // Initialise the shoe.
-    setShoe(new Shoe(
-      Integer.parseInt(properties.getProperty(NUMBER_OF_DECKS_IN_SHOE_RESOURCE)),
-      Boolean.parseBoolean(properties.getProperty(SHUFFLE_SHOE_RESOURCE))));
+
+    setShoe(getDealer().cobbleShoe());
 
     // Initialise the table minimum bet.
-    sTableMinimumBet = Double.parseDouble(properties.getProperty(TABLE_MINIMUM_BET_RESOURCE));
-
+    sTableMinimumBet = Double.parseDouble(sProperties.getProperty(TABLE_MINIMUM_BET_RESOURCE));
   }
 
   //---------------------------------------------------------------------
