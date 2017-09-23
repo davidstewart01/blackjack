@@ -4,8 +4,8 @@ import card.Shoe;
 import player.BlackjackDealer;
 import player.BlackjackPlayer;
 
-import java.io.FileInputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Properties;
@@ -66,7 +66,7 @@ public class Blackjack {
   //-------------------------------------
 
   /** The location of the game parameters properties file. */
-  public static final String GAME_PARAMETERS_FILE_RESOURCE_LOCATION = "/game_parameters.properties";
+  public static final String GAME_PARAMETERS_FILE_RESOURCE_LOCATION = "game_parameters.properties";
 
   /** The resource that defines the number of decks that should go into a shoe. */
   public static final String NUMBER_OF_DECKS_IN_SHOE_RESOURCE = "number_of_decks_in_shoe";
@@ -90,7 +90,7 @@ public class Blackjack {
   //---------------------------------------------------------------------
   
   /** The location of the properties file that holds the game parameters. */
-  public static String sPropertiesFileLocation = null;
+  public static InputStream sPropertiesFileLocation = null;
   
   /** The minimum bet allowed at the table. */
   public static double sTableMinimumBet = 0.0d;
@@ -105,7 +105,7 @@ public class Blackjack {
    * Constructor that initialises dealer and players for game.
    */
   public Blackjack() {
-    sPropertiesFileLocation = getClass().getResource(GAME_PARAMETERS_FILE_RESOURCE_LOCATION).getPath();
+    sPropertiesFileLocation = getClass().getResourceAsStream(GAME_PARAMETERS_FILE_RESOURCE_LOCATION);
     sProperties = getProperties();
     
     // TODO: Add players in a loop. number of from properties file?
@@ -199,7 +199,7 @@ public class Blackjack {
     Properties properties = new Properties();
     
     try {
-      properties.load(new FileInputStream(sPropertiesFileLocation));
+      properties.load(sPropertiesFileLocation);
       return properties;
     }
     catch (IOException ioe) {
