@@ -250,7 +250,7 @@ public class BlackjackGUI {
       }
       
       dealInitialCards(game.getPlayers().get(i), i);
-      playerLabels.get(i).setText(Integer.toString(game.getPlayers().get(i).getCardTotal()));
+      playerLabels.get(i).setText(Integer.toString(game.getPlayers().get(i).getHands().get(0).getCardTotal()));
     }
   
     mFirstGame = false;
@@ -268,7 +268,7 @@ public class BlackjackGUI {
   
     // Deal the dealer's initial cards.
     dealInitialCards(game.getDealer(), 0);
-    dealerLabel.setText("Dealer:  " + game.getDealer().getCardTotal());
+    dealerLabel.setText("Dealer:  " + game.getDealer().getHands().get(0).getCardTotal());
     
     
     hitButton.setEnabled(true);
@@ -278,7 +278,7 @@ public class BlackjackGUI {
 
     // TODO: If dealer has blackjack here, he wins.
     // Player has blackjack.
-    if (game.getPlayers().get(game.getActivePlayer()).getCardTotal() == 21) {
+    if (game.getPlayers().get(game.getActivePlayer()).getHands().get(0).getCardTotal() == 21) {
       if (game.getActivePlayer() == game.getPlayers().size() - 1) {
         dealersTurn();
       }
@@ -331,7 +331,7 @@ public class BlackjackGUI {
     BlackjackPlayer activePlayer = game.getPlayers().get(game.getActivePlayer());
     
     Card hitCard = game.getDealer().dealCard(activePlayer, game.getShoe());
-    playerLabels.get(game.getActivePlayer()).setText(Integer.toString(activePlayer.getCardTotal()));
+    playerLabels.get(game.getActivePlayer()).setText(Integer.toString(activePlayer.getHands().get(0).getCardTotal()));
     
     // TODO: Remove this, just for testing...
     shoeSizeDisplay.setText("    Cards in shoe: " + Integer.toString(game.getShoe().size()));
@@ -339,7 +339,7 @@ public class BlackjackGUI {
     JLabel hitCardImage = new JLabel(hitCard.getCardImage());
     playerCardPanels.get(game.getActivePlayer()).add(hitCardImage, 1);
     
-    if (activePlayer.getHands().get(0).isBust() || activePlayer.getCardTotal() == 21) {
+    if (activePlayer.getHands().get(0).isBust() || activePlayer.getHands().get(0).getCardTotal() == 21) {
       
       if (game.getActivePlayer() == game.getPlayers().size() - 1) {
         hitButton.setEnabled(false);
@@ -430,7 +430,8 @@ public class BlackjackGUI {
           bet = Double.valueOf(userInput);
       
           if (bet > pPlayer.getPlayerBank()) {
-            JOptionPane.showMessageDialog(null, "You have entered an amount greater than you have in the bank.  " + "Y'all ain't no High Rolla!!");
+            JOptionPane.showMessageDialog(null,
+              "You have entered an amount greater than you have in the bank.  " + "Y'all ain't no High Rolla!!");
             continue;
           }
         }
@@ -489,7 +490,7 @@ public class BlackjackGUI {
   public void dealersTurn() {
     dealerCardPanel.removeAll();
     dealerCardPanel.add(dealerLabel);
-    dealerLabel.setText(dealerLabel.getText() + ": " + game.getDealer().getCardTotal());
+    dealerLabel.setText(dealerLabel.getText() + ": " + game.getDealer().getHands().get(0).getCardTotal());
 
     // Iterate through cards and re-display.
     Card dealerHitCard = null;
@@ -516,7 +517,7 @@ public class BlackjackGUI {
         allPlayersBust = false;
       }
 
-      if (game.getPlayers().get(i).getCardTotal() != 21) {
+      if (game.getPlayers().get(i).getHands().get(0).getCardTotal() != 21) {
         allPlayersHave21 = false;
       }
     }
@@ -526,7 +527,7 @@ public class BlackjackGUI {
 
     while(!isGameFinished) {
       if (!game.getDealer().getHands().get(0).isSticking() && !game.getDealer().getHands().get(0).isBust()) {
-        if (game.getDealer().getCardTotal() < 17) {
+        if (game.getDealer().getHands().get(0).getCardTotal() < 17) {
           Card card = game.getDealer().dealCard(game.getDealer(), game.getShoe());
 
           // TODO: Remove this, just for testing...
@@ -546,10 +547,10 @@ public class BlackjackGUI {
       }
     }
 
-    dealerLabel.setText("Dealer: " + game.getDealer().getCardTotal());
+    dealerLabel.setText("Dealer: " + game.getDealer().getHands().get(0).getCardTotal());
     
     for (int i = 0; i < game.getPlayers().size(); i++) {
-      playerLabels.get(i).setText(Integer.toString(game.getPlayers().get(i).getCardTotal()));
+      playerLabels.get(i).setText(Integer.toString(game.getPlayers().get(i).getHands().get(0).getCardTotal()));
     }
     
     determineGameOutcome();

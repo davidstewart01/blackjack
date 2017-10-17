@@ -48,7 +48,7 @@ public class BlackjackConsole {
           System.out.println("");
           System.out.println("========");
           System.out.println("Dealer's card: " + game.getDealer().getHands().get(0));
-          System.out.println("Dealer's total: " + game.getDealer().getCardTotal());
+          System.out.println("Dealer's total: " + game.getDealer().getHands().get(0).getCardTotal());
           System.out.println("========");
           System.out.println("");
 
@@ -85,7 +85,7 @@ public class BlackjackConsole {
       // Dealers turns
       else {
         if (!game.getDealer().getHands().get(0).isSticking() && !game.getDealer().getHands().get(0).isBust()) {
-          if (game.getDealer().getCardTotal() < 17) {
+          if (game.getDealer().getHands().get(0).getCardTotal() < 17) {
             game.getDealer().hit(game.getShoe().removeLast());
           }
           else {
@@ -112,21 +112,21 @@ public class BlackjackConsole {
     System.out.println("\n");
     System.out.println("Dealer:");
 
-    if (game.getDealer().getCardTotal() > 21) {
+    if (game.getDealer().getHands().get(0).getCardTotal() > 21) {
       System.out.println("BUST!");
     }
 
-    System.out.println(game.getDealer().getCardTotal());
+    System.out.println(game.getDealer().getHands().get(0).getCardTotal());
     showPlayerHand(game.getDealer());
     System.out.println("");
 
     System.out.println("Player:");
 
-    if (game.getPlayers().get(0).getCardTotal() > 21) {
+    if (game.getPlayers().get(0).getHands().get(0).getCardTotal() > 21) {
       System.out.println("BUST!");
     }
 
-    System.out.println(game.getPlayers().get(0).getCardTotal());
+    System.out.println(game.getPlayers().get(0).getHands().get(0).getCardTotal());
     showPlayerHand(game.getPlayers().get(0));
     System.out.println("");
 
@@ -143,7 +143,7 @@ public class BlackjackConsole {
    */
   public void showPlayerHand(BlackjackPlayer pPlayer) {
     pPlayer.getHands().get(0).forEach(System.out::println);
-    System.out.println("Player's hand total: " + pPlayer.getCardTotal());
+    System.out.println("Player's hand total: " + pPlayer.getHands().get(0).getCardTotal());
   }
 
   /**

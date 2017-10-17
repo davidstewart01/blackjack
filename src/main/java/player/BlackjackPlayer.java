@@ -140,11 +140,11 @@ public class BlackjackPlayer extends Player {
   public void hit(Card pCard) {
     getHands().get(0).add(pCard);
 
-    if (getCardTotal() > 21) {
+    if (getHands().get(0).getCardTotal() > 21) {
       getHands().get(0).setBust(true);
     }
     //TODO - move stick logic to hand and set here when value = 21
-    if (getCardTotal() == 21) {
+    if (getHands().get(0).getCardTotal() == 21) {
       //getHands().get(0).setSticking(true);
     }
   }
@@ -165,7 +165,7 @@ public class BlackjackPlayer extends Player {
    * @return
    *   The running total value of all player 's cards in hand.
    */
-  public int getCardTotal() {
+  /*public int getCardTotal() {
     int total = 0;
     int numAces = 0;
 
@@ -191,6 +191,6 @@ public class BlackjackPlayer extends Player {
     }
 
     return total;
-  }
+  }*/
 
 }

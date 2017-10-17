@@ -251,41 +251,51 @@ public class Blackjack {
       BlackjackPlayer player = getPlayers().get(i);
       String playerOutcome = "";
     
-      if ((getDealer().getHands().get(0).getNumberOfCardsInHand() == 2 && getDealer().getCardTotal() == 21) && player.getHands().get(0).getNumberOfCardsInHand() == 2 && player.getCardTotal() == 21) {
+      if ((getDealer().getHands().get(0).getNumberOfCardsInHand() == 2
+          && getDealer().getHands().get(0).getCardTotal() == 21)
+            && player.getHands().get(0).getNumberOfCardsInHand() == 2
+              && player.getHands().get(0).getCardTotal() == 21) {
       
         player.setPlayerBank(player.getPlayerBank() + (player.getHands().get(0).getBet()));
   
         playerOutcome = GAME_OUTCOME_PUSH;
       }
-      else if ((getDealer().getHands().get(0).getNumberOfCardsInHand() == 2 && getDealer().getCardTotal() == 21) && ((player.getHands().get(0).getNumberOfCardsInHand() == 2 && player.getCardTotal() != 21) || player.getHands().get(0).getNumberOfCardsInHand() > 2)) {
+      else if ((getDealer().getHands().get(0).getNumberOfCardsInHand() == 2
+        && getDealer().getHands().get(0).getCardTotal() == 21)
+          && ((player.getHands().get(0).getNumberOfCardsInHand() == 2
+            && player.getHands().get(0).getCardTotal() != 21) || player.getHands().get(0).getNumberOfCardsInHand() > 2)) {
+
         playerOutcome = GAME_OUTCOME_DEALER_BLACKJACK;
       }
-      else if ((player.getHands().get(0).getNumberOfCardsInHand() == 2 && player.getCardTotal() == 21) && ((getDealer().getHands().get(0).getNumberOfCardsInHand() == 2 && getDealer().getCardTotal() != 21) || getDealer().getHands().get(0).getNumberOfCardsInHand() > 2)) {
+      else if ((player.getHands().get(0).getNumberOfCardsInHand() == 2
+        && player.getHands().get(0).getCardTotal() == 21)
+          && ((getDealer().getHands().get(0).getNumberOfCardsInHand() == 2
+            && getDealer().getHands().get(0).getCardTotal() != 21) || getDealer().getHands().get(0).getNumberOfCardsInHand() > 2)) {
       
         // Update bank with blackjack winning ratio at 3:2.
         player.setPlayerBank(player.getPlayerBank() + (player.getHands().get(0).getBet() * 2.5));
   
         playerOutcome = GAME_OUTCOME_PLAYER_BLACKJACK.replace("%", player.getUserName());
       }
-      else if (getDealer().getCardTotal() > 21 && player.getCardTotal() <= 21) {
+      else if (getDealer().getHands().get(0).getCardTotal() > 21 && player.getHands().get(0).getCardTotal() <= 21) {
       
         // Add bet plus win back to the player bank at 1:1
         player.setPlayerBank(player.getPlayerBank() + (player.getHands().get(0).getBet() * 2));
   
         playerOutcome = GAME_OUTCOME_DEALER_BUST.replace("%", player.getUserName());
       }
-      else if (player.getCardTotal() > 21 && getDealer().getCardTotal() <= 21) {
+      else if (player.getHands().get(0).getCardTotal() > 21 && getDealer().getHands().get(0).getCardTotal() <= 21) {
         playerOutcome = GAME_OUTCOME_PLAYER_BUST.replace("%", player.getUserName());
       }
     
-      else if (player.getCardTotal() > 21 && getDealer().getCardTotal() > 21) {
+      else if (player.getHands().get(0).getCardTotal() > 21 && getDealer().getHands().get(0).getCardTotal() > 21) {
         playerOutcome = GAME_OUTCOME_PLAYER_AND_DEALER_BUST.replace("%", player.getUserName());
       }
       else {
-        if (getDealer().getCardTotal() > player.getCardTotal()) {
+        if (getDealer().getHands().get(0).getCardTotal() > player.getHands().get(0).getCardTotal()) {
           playerOutcome = GAME_OUTCOME_DEALER_WINS;
         }
-        else if (player.getCardTotal() > getDealer().getCardTotal()) {
+        else if (player.getHands().get(0).getCardTotal() > getDealer().getHands().get(0).getCardTotal()) {
   
           // Add bet plus win back to the player bank at 1:1
           player.setPlayerBank(player.getPlayerBank() + (player.getHands().get(0).getBet() * 2));
