@@ -155,7 +155,6 @@ public class BlackjackGUI {
     pPane.add(topPanel, constraints);
   
     // DEALER PANEL
-    dealerCardPanel.setBackground(TABLE_COLOUR);
     dealerCardPanel.add(dealerLabel);
     dealerCardPanel.setBackground(TABLE_COLOUR);
     dealerCardPanel.setLayout(new FlowLayout());
@@ -391,17 +390,10 @@ public class BlackjackGUI {
     updateBankLabels();
     hit();
     stick();
-  
-    playerCardPanels.get(activePlayerIndex).setBackground(INACTIVE_PLAYER_COLOUR);
-    
-    if (game.getActivePlayer() == game.getPlayers().size() - 1) {
-      doubleDownButton.setEnabled(false);
-    }
-    else {
+
+    if (game.getActivePlayer() != game.getPlayers().size() - 1){
       game.setActivePlayer(activePlayerIndex + 1);
     }
-  
-    playerCardPanels.get(game.getActivePlayer()).setBackground(ACTIVE_PLAYER_COLOUR);
   }
 
   /**
