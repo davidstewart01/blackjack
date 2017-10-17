@@ -4,6 +4,7 @@ import card.Shoe;
 import player.BlackjackDealer;
 import player.BlackjackPlayer;
 
+import javax.swing.JOptionPane;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
@@ -21,6 +22,8 @@ public class Blackjack {
   // CONSTANTS
   //---------------------------------------------------------------------
 
+  public static final String[] PLAYER_NAMES = {"Dave", "Paul", "John", "Jay", "Suzy"};
+  
   //-------------------------------------
   // Game outcome messages.
   //-------------------------------------
@@ -108,10 +111,13 @@ public class Blackjack {
     sPropertiesFileLocation = getClass().getResourceAsStream(GAME_PARAMETERS_FILE_RESOURCE_LOCATION);
     sProperties = getProperties();
     
-    // TODO: Add players in a loop. number of from properties file?
-    getPlayers().add(new BlackjackPlayer("Paul"));
+    int numberOfPlayers = Integer.parseInt(JOptionPane.showInputDialog("Enter the number of players."));
+    
+    for (int i = 0; i < numberOfPlayers; i++) {
+      getPlayers().add(new BlackjackPlayer(PLAYER_NAMES[i]));
+    }
+    
     setPlayers(getPlayers());
-
     setShoe(getDealer().cobbleShoe());
 
     // Initialise the table minimum bet.
@@ -142,7 +148,28 @@ public class Blackjack {
   public List<BlackjackPlayer> getPlayers() {
     return mPlayers;
   }
-
+  
+  //--------------------------------------------------
+  // property: activePlayer
+  //--------------------------------------------------//
+  private int mActivePlayer = 0;
+  
+  /**
+   * @param pActivePlayer
+   *   The currently active player in the game.
+   */
+  public void setActivePlayer(int pActivePlayer) {
+    mActivePlayer = pActivePlayer;
+  }
+  
+  /**
+   * @return
+   *   The currently active player in the game.
+   */
+  public int getActivePlayer() {
+    return mActivePlayer;
+  }
+  
   //--------------------------------------------------
   // property: dealer
   //--------------------------------------------------
@@ -216,66 +243,65 @@ public class Blackjack {
    * @return
    *   The outcome of the game.
    */
-  public String determineOutcome() {
-
-    if ((getDealer().getHands().get(0).getNumberOfCardsInHand() == 2 && getDealer().getCardTotal() == 21)
-        && getPlayers().get(0).getHands().get(0).getNumberOfCardsInHand() == 2 && getPlayers().get(0).getCardTotal() == 21) {
-
-      getPlayers().get(0).setPlayerBank(
-        getPlayers().get(0).getPlayerBank() + (getPlayers().get(0).getHands().get(0).getBet()));
-
-      return GAME_OUTCOME_PUSH;
-    }
-    else if ((getDealer().getHands().get(0).getNumberOfCardsInHand() == 2 && getDealer().getCardTotal() == 21)
-      && ((getPlayers().get(0).getHands().get(0).getNumberOfCardsInHand() == 2 && getPlayers().get(0).getCardTotal() != 21)
-        || getPlayers().get(0).getHands().get(0).getNumberOfCardsInHand() > 2)) {
-
-      return GAME_OUTCOME_DEALER_BLACKJACK;
-    }
-    else if ((getPlayers().get(0).getHands().get(0).getNumberOfCardsInHand() == 2 && getPlayers().get(0).getCardTotal() == 21)
-      && ((getDealer().getHands().get(0).getNumberOfCardsInHand() == 2 && getDealer().getCardTotal() != 21)
-        || getDealer().getHands().get(0).getNumberOfCardsInHand() > 2)) {
-
-      // Update bank with blackjack winning ratio at 3:2.
-      getPlayers().get(0).setPlayerBank(
-        getPlayers().get(0).getPlayerBank() + (getPlayers().get(0).getHands().get(0).getBet() * 2.5));
-
-      return GAME_OUTCOME_PLAYER_BLACKJACK.replace("%", getPlayers().get(0).getUserName());
-    }
-    else if (getDealer().getCardTotal() > 21 && getPlayers().get(0).getCardTotal() <= 21) {
-
-      // Add bet plus win back to the player bank at 1:1
-      getPlayers().get(0).setPlayerBank(
-        getPlayers().get(0).getPlayerBank() + (getPlayers().get(0).getHands().get(0).getBet() * 2));
-
-      return GAME_OUTCOME_DEALER_BUST.replace("%", getPlayers().get(0).getUserName());
-    }
-    else if (getPlayers().get(0).getCardTotal() > 21 && getDealer().getCardTotal() <= 21) {
-      return GAME_OUTCOME_PLAYER_BUST.replace("%", getPlayers().get(0).getUserName());
-    }
-
-    else if (getPlayers().get(0).getCardTotal() > 21 && getDealer().getCardTotal() > 21) {
-      return GAME_OUTCOME_PLAYER_AND_DEALER_BUST.replace("%", getPlayers().get(0).getUserName());
-    }
-    else {
-      if (getDealer().getCardTotal() > getPlayers().get(0).getCardTotal()) {
-        return GAME_OUTCOME_DEALER_WINS;
+  public List<String> determineOutcome() {
+  
+    List<String> allPlayersOutcomes = new ArrayList<>(this.getPlayers().size());
+  
+    for (int i = 0; i < this.getPlayers().size(); i++) {
+      BlackjackPlayer player = getPlayers().get(i);
+      String playerOutcome = "";
+    
+      if ((getDealer().getHands().get(0).getNumberOfCardsInHand() == 2 && getDealer().getCardTotal() == 21) && player.getHands().get(0).getNumberOfCardsInHand() == 2 && player.getCardTotal() == 21) {
+      
+        player.setPlayerBank(player.getPlayerBank() + (player.getHands().get(0).getBet()));
+  
+        playerOutcome = GAME_OUTCOME_PUSH;
       }
-      else if (getPlayers().get(0).getCardTotal() > getDealer().getCardTotal()) {
-
+      else if ((getDealer().getHands().get(0).getNumberOfCardsInHand() == 2 && getDealer().getCardTotal() == 21) && ((player.getHands().get(0).getNumberOfCardsInHand() == 2 && player.getCardTotal() != 21) || player.getHands().get(0).getNumberOfCardsInHand() > 2)) {
+        playerOutcome = GAME_OUTCOME_DEALER_BLACKJACK;
+      }
+      else if ((player.getHands().get(0).getNumberOfCardsInHand() == 2 && player.getCardTotal() == 21) && ((getDealer().getHands().get(0).getNumberOfCardsInHand() == 2 && getDealer().getCardTotal() != 21) || getDealer().getHands().get(0).getNumberOfCardsInHand() > 2)) {
+      
+        // Update bank with blackjack winning ratio at 3:2.
+        player.setPlayerBank(player.getPlayerBank() + (player.getHands().get(0).getBet() * 2.5));
+  
+        playerOutcome = GAME_OUTCOME_PLAYER_BLACKJACK.replace("%", player.getUserName());
+      }
+      else if (getDealer().getCardTotal() > 21 && player.getCardTotal() <= 21) {
+      
         // Add bet plus win back to the player bank at 1:1
-        getPlayers().get(0).setPlayerBank(
-          getPlayers().get(0).getPlayerBank() + (getPlayers().get(0).getHands().get(0).getBet() * 2));
-
-        return GAME_OUTCOME_PLAYER_WINS.replace("%", getPlayers().get(0).getUserName());
+        player.setPlayerBank(player.getPlayerBank() + (player.getHands().get(0).getBet() * 2));
+  
+        playerOutcome = GAME_OUTCOME_DEALER_BUST.replace("%", player.getUserName());
+      }
+      else if (player.getCardTotal() > 21 && getDealer().getCardTotal() <= 21) {
+        playerOutcome = GAME_OUTCOME_PLAYER_BUST.replace("%", player.getUserName());
+      }
+    
+      else if (player.getCardTotal() > 21 && getDealer().getCardTotal() > 21) {
+        playerOutcome = GAME_OUTCOME_PLAYER_AND_DEALER_BUST.replace("%", player.getUserName());
       }
       else {
-        getPlayers().get(0).setPlayerBank(
-          getPlayers().get(0).getPlayerBank() + (getPlayers().get(0).getHands().get(0).getBet()));
-
-        return GAME_OUTCOME_PUSH;
+        if (getDealer().getCardTotal() > player.getCardTotal()) {
+          playerOutcome = GAME_OUTCOME_DEALER_WINS;
+        }
+        else if (player.getCardTotal() > getDealer().getCardTotal()) {
+  
+          // Add bet plus win back to the player bank at 1:1
+          player.setPlayerBank(player.getPlayerBank() + (player.getHands().get(0).getBet() * 2));
+  
+          playerOutcome = GAME_OUTCOME_PLAYER_WINS.replace("%", player.getUserName());
+        }
+        else {
+          player.setPlayerBank(player.getPlayerBank() + (player.getHands().get(0).getBet()));
+  
+          playerOutcome = GAME_OUTCOME_PUSH;
+        }
       }
+      
+      allPlayersOutcomes.add(playerOutcome);
     }
+    return allPlayersOutcomes;
   }
 
 }

@@ -10,6 +10,7 @@ import java.awt.event.*;
 import java.text.DecimalFormat;
 import java.text.NumberFormat;
 import java.util.*;
+import java.util.List;
 
 /**
  * Class that adds the game to a proper GUI.
@@ -38,11 +39,13 @@ public class BlackjackGUI {
   /** Panel that will hold the dealer's cards. */
   private JPanel dealerCardPanel = new JPanel();
   
-  /** Panel that will hold the player's cards. */
+  /** Panels that will hold the player's cards. */
   private JPanel playerCardPanel = new JPanel();
-
+  private List<JPanel> playerCardPanels = new ArrayList<>(5);
+  
   /** Panel that will hold the player's available betting pool. */
   private JPanel playerBankPanel = new JPanel();
+  private List<JPanel> playerBankPanels = new ArrayList<>(5);
   
   //-------------------------------------------------
   // Game Labels
@@ -52,13 +55,12 @@ public class BlackjackGUI {
   private JLabel dealerLabel = new JLabel();
   
   /** Label that indicates that the player is the player. */
-  private JLabel playerLabel = new JLabel();
+  //private JLabel playerLabel = new JLabel();
+  private List<JLabel> playerLabels = new ArrayList(5);
   
   /** Label that displays the player total. */
-  private JLabel playerBankLabel = new JLabel();
-  
-  /** Text box that displays the outcome of the game. */
-  private JTextPane statusTextBox = new JTextPane();
+  private List<JLabel> playerBankLabels = new ArrayList(5);
+
   
   //-------------------------------------------------
   // Game Buttons
@@ -93,28 +95,21 @@ public class BlackjackGUI {
   // The labels to represent the cards for the game.
   //-------------------------------------------------
   
-  /** This will represent the back of the card. */
-  private JLabel dealerInitialCard0 = null;
-  
-  /** This will represent the dealer's first card. */
+  /** This will represent the dealer's first card that is not shown to the user until the end of the game. */
   private JLabel dealerInitialCard1 = null;
-  
-  /** This will represent the dealer's second card. */
-  private JLabel dealerInitialCard2 = null;
-  
-  /** This will represent the player's first card. */
-  private JLabel playerInitialCard1 = null;
-  
-  /** This will represent the player's second card. */
-  private JLabel playerInitialCard2 = null;
-
 
   // TODO: Remove this, just for testing...
   JLabel shoeSizeDisplay = new JLabel();
 
 
   /** The colour that will be used for the table. */
-  private Color tableColour = new Color(0, 122, 0);
+  private Color TABLE_COLOUR = new Color(0, 122, 0);
+  
+  /** The colour that will indicate the inactive players. */
+  private Color INACTIVE_PLAYER_COLOUR = new Color(0, 155, 0);
+  
+  /** The colour that will indicate the active players. */
+  private Color ACTIVE_PLAYER_COLOUR = new Color(0, 200, 0);
 
   //-------------------------------------------------------------
   // MEMBERS
@@ -122,6 +117,9 @@ public class BlackjackGUI {
   
   /** The game instance. */
   private Blackjack game = new Blackjack();
+  
+  /** Flag that indicates the the current game is the first one. */
+  private boolean mFirstGame = true;
   
   //-------------------------------------------------------------
   // METHODS
@@ -138,25 +136,18 @@ public class BlackjackGUI {
     GridBagConstraints constraints = new GridBagConstraints();
     constraints.fill = GridBagConstraints.HORIZONTAL;
 
-    // STATUS BOX.
-    statusTextBox.setText(" ");
-    statusTextBox.setFont(new java.awt.Font("Helvetica Bold", 1, 20));
-    statusTextBox.setVisible(false);
-
     createGameButtons();
-    updateBankLabel();
 
     // TOP PANEL.
-    topPanel.setBackground(tableColour);
+    topPanel.setBackground(TABLE_COLOUR);
     topPanel.setLayout(new FlowLayout());
-    topPanel.add(statusTextBox);
     topPanel.add(dealButton);
     topPanel.add(hitButton);
     topPanel.add(stickButton);
     topPanel.add(doubleDownButton);
     topPanel.add(playAgainButton);
     topPanel.add(shoeSizeDisplay);
-    topPanel.setBackground(tableColour);
+    topPanel.setBackground(TABLE_COLOUR);
     topPanel.setLayout(new FlowLayout());
     constraints.fill = GridBagConstraints.HORIZONTAL;
     constraints.gridx = 0;
@@ -164,9 +155,9 @@ public class BlackjackGUI {
     pPane.add(topPanel, constraints);
   
     // DEALER PANEL
-    dealerCardPanel.setBackground(tableColour);
+    dealerCardPanel.setBackground(TABLE_COLOUR);
     dealerCardPanel.add(dealerLabel);
-    dealerCardPanel.setBackground(tableColour);
+    dealerCardPanel.setBackground(TABLE_COLOUR);
     dealerCardPanel.setLayout(new FlowLayout());
     constraints.insets = new Insets(10,0,0,0);  //top padding
     constraints.fill = GridBagConstraints.HORIZONTAL;
@@ -174,21 +165,20 @@ public class BlackjackGUI {
     constraints.gridx = 0;
     constraints.gridy = 1;
     pPane.add(dealerCardPanel, constraints);
-  
-    // PLAYER CARD PANEL
-    playerCardPanel.setBackground(tableColour);
-    playerCardPanel.add(playerLabel);
-    playerCardPanel.setBackground(tableColour);
+    
+    // PLAYER CARD PANELS
+    playerCardPanel.setBackground(TABLE_COLOUR);
+    playerCardPanel.setBackground(TABLE_COLOUR);
     playerCardPanel.setLayout(new FlowLayout());
-    constraints.insets = new Insets(80,0,0,0);  //top padding
+    constraints.insets = new Insets(80, 0, 0, 0);  //top padding
     constraints.fill = GridBagConstraints.HORIZONTAL;
     constraints.weightx = 0.5;
     constraints.gridx = 0;
     constraints.gridy = 2;
     pPane.add(playerCardPanel, constraints);
-  
+    
     // BANK PANEL
-    playerBankPanel.setBackground(tableColour);
+    playerBankPanel.setBackground(TABLE_COLOUR);
     playerBankPanel.setLayout(new FlowLayout());
     constraints.insets = new Insets(20,0,0,0);  //top padding
     constraints.fill = GridBagConstraints.HORIZONTAL;
@@ -196,12 +186,25 @@ public class BlackjackGUI {
     constraints.gridx = 0;
     constraints.gridy = 6;
     pPane.add(playerBankPanel, constraints);
-
-    // LABELS.
-    dealerLabel.setText("Dealer:  ");
-    playerLabel.setText("Player:  ");
-
-  }//end display
+  
+    for (int i = 0; i < game.getPlayers().size(); i++) {
+      JPanel playerXBankPanel = new JPanel();
+      JLabel playerXBankLabel = new JLabel();
+  
+      playerXBankPanel.setBackground(new Color(0, 152, 0));
+      playerXBankPanel.setLayout(new FlowLayout());
+      playerXBankPanel.add(playerXBankLabel);
+  
+      playerBankLabels.add(playerXBankLabel);
+      playerBankPanels.add(playerXBankPanel);
+      playerXBankPanel.add(playerXBankLabel);
+  
+      playerXBankPanel.setBackground(INACTIVE_PLAYER_COLOUR);
+      
+      playerBankPanel.add(playerXBankPanel);
+    }
+    
+  }
 
   /**
    * Deal out the dealer and player cards.
@@ -211,41 +214,79 @@ public class BlackjackGUI {
 
     // TODO: Remove this, just for testing...
     shoeSizeDisplay.setText("    Cards in shoe: " + Integer.toString(game.getShoe().size()));
-
-    placeBet();
-
-    dealerCardPanel.add(dealerLabel);
-    playerCardPanel.add(playerLabel);
-    playerBankPanel.add(playerBankLabel);
-
-    dealerInitialCard0 = new JLabel(new ImageIcon(this.getClass().getResource("/card_images/back.jpg")));
   
-    dealInitialCards(game.getDealer());
-    dealInitialCards(game.getPlayers().get(0));
-
-    dealerCardPanel.add(dealerInitialCard0);
-    dealerCardPanel.add(dealerInitialCard2);
-
-    playerCardPanel.add(playerInitialCard1);
-    playerCardPanel.add(playerInitialCard2);
-
+    for (int i = 0; i < game.getPlayers().size(); i++) {
+      placeBet(game.getPlayers().get(i));
+    }
+    
+    // Deal all of the players initial cards.
+    for (int i = 0; i < game.getPlayers().size(); i++) {
+  
+      if (mFirstGame) {
+        JPanel playerXCardPanel = new JPanel();
+        JLabel playerXLabel = new JLabel();
+  
+        playerXCardPanel.setLayout(new FlowLayout());
+        playerXCardPanel.add(playerXLabel);
+  
+        playerLabels.add(playerXLabel);
+        playerCardPanels.add(playerXCardPanel);
+        playerCardPanel.add(playerXCardPanel);
+  
+        if (i == 0) {
+          playerXCardPanel.setBackground(ACTIVE_PLAYER_COLOUR);
+        }
+        else {
+          playerXCardPanel.setBackground(INACTIVE_PLAYER_COLOUR);
+        }
+      }
+      else {
+        if (i == 0) {
+          playerCardPanels.get(i).setBackground(ACTIVE_PLAYER_COLOUR);
+        }
+        else {
+          playerCardPanels.get(i).setBackground(INACTIVE_PLAYER_COLOUR);
+        }
+      }
+      
+      dealInitialCards(game.getPlayers().get(i), i);
+      playerLabels.get(i).setText(Integer.toString(game.getPlayers().get(i).getCardTotal()));
+    }
+  
+    mFirstGame = false;
+    
+    for (int i = 0; i < game.getPlayers().size(); i++) {
+      JLabel playerXBankLabel = new JLabel();
+      playerBankLabels.add(playerXBankLabel);
+      playerBankPanels.get(i).add(playerXBankLabel);
+    }
+  
+    updateBankLabels();
+    
+    dealerLabel.setText("Dealer: ");
+    dealerCardPanel.add(dealerLabel);
+  
+    // Deal the dealer's initial cards.
+    dealInitialCards(game.getDealer(), 0);
     dealerLabel.setText("Dealer:  " + game.getDealer().getCardTotal());
-    playerLabel.setText("Player:  " + game.getPlayers().get(0).getCardTotal());
-
+    
+    
     hitButton.setEnabled(true);
     stickButton.setEnabled(true);
     dealButton.setEnabled(false);
     doubleDownButton.setEnabled(true);
 
     // TODO: If dealer has blackjack here, he wins.
-
-    if (game.getPlayers().get(0).getCardTotal() == 21) {
-      hitButton.setEnabled(false);
-      stickButton.setEnabled(false);
-      dealButton.setEnabled(false);
-      playAgainButton.setEnabled(true);
-
-      dealersTurn();
+    // Player has blackjack.
+    if (game.getPlayers().get(game.getActivePlayer()).getCardTotal() == 21) {
+      if (game.getActivePlayer() == game.getPlayers().size() - 1) {
+        dealersTurn();
+      }
+      else {
+        playerCardPanels.get(game.getActivePlayer()).setBackground(INACTIVE_PLAYER_COLOUR);
+        game.setActivePlayer(game.getActivePlayer() + 1);
+        playerCardPanels.get(game.getActivePlayer()).setBackground(ACTIVE_PLAYER_COLOUR);
+      }
     }
   }
   
@@ -257,113 +298,139 @@ public class BlackjackGUI {
    * @param pPlayer
    *   The player whose cards will be retrieved and displayed.
    */
-  protected void dealInitialCards(BlackjackPlayer pPlayer) {
-    Card card = null;
-  
-    for (int i = 0; i < 2; i++) {
-      card = pPlayer.getHands().get(0).get(i);
+  protected void dealInitialCards(BlackjackPlayer pPlayer, int pPlayerIndex) {
     
-      if (i == 0) {
-        if (pPlayer instanceof BlackjackDealer) {
-          dealerInitialCard1 = new JLabel(card.getCardImage());
+    if (pPlayer instanceof BlackjackDealer) {
+      // Deal dealer's initial cards.
+      dealerCardPanel.add(new JLabel(new ImageIcon(this.getClass().getResource("/card_images/back.jpg"))));
+      
+      for (int i = 0; i < 2; i++) {
+        if (i == 0) {
+          dealerInitialCard1 = new JLabel(pPlayer.getHands().get(0).get(i).getCardImage());
         }
         else {
-          playerInitialCard1 = new JLabel(card.getCardImage());
-        }
-      }
-      else {
-        if (pPlayer instanceof BlackjackDealer) {
-          dealerInitialCard2 = new JLabel(card.getCardImage());
-        }
-        else {
-          playerInitialCard2 = new JLabel(card.getCardImage());
+          dealerCardPanel.add(new JLabel(pPlayer.getHands().get(0).get(i).getCardImage()));
         }
       }
     }
-
+    else {
+      // Deal player's initial cards.
+      for (int i = 0; i < 2; i++) {
+        playerCardPanels.get(pPlayerIndex).add(new JLabel(pPlayer.getHands().get(0).get(i).getCardImage()));
+      }
+    }
+    
     // TODO: Remove this, just for testing...
     shoeSizeDisplay.setText("    Cards in shoe: " + Integer.toString(game.getShoe().size()));
   }
   
   /**
-   * Deals the payer another card.
+   * Deals the player another card.
    */
   public void hit() {
-    doubleDownButton.setEnabled(false);
-
-    Card hitCard = game.getDealer().dealCard(game.getPlayers().get(0), game.getShoe());
-
+    BlackjackPlayer activePlayer = game.getPlayers().get(game.getActivePlayer());
+    
+    Card hitCard = game.getDealer().dealCard(activePlayer, game.getShoe());
+    playerLabels.get(game.getActivePlayer()).setText(Integer.toString(activePlayer.getCardTotal()));
+    
     // TODO: Remove this, just for testing...
     shoeSizeDisplay.setText("    Cards in shoe: " + Integer.toString(game.getShoe().size()));
-
+    
     JLabel hitCardImage = new JLabel(hitCard.getCardImage());
-    playerCardPanel.add(hitCardImage);
-    playerCardPanel.repaint();
-
-    if (game.getPlayers().get(0).getHands().get(0).isBust() || game.getPlayers().get(0).getCardTotal() == 21) {
-      hitButton.setEnabled(false);
-      dealButton.setEnabled(false);
-      stickButton.setEnabled(false);
-      playAgainButton.setEnabled(true);
-
-      dealersTurn();
+    playerCardPanels.get(game.getActivePlayer()).add(hitCardImage, 1);
+    
+    if (activePlayer.getHands().get(0).isBust() || activePlayer.getCardTotal() == 21) {
+      
+      if (game.getActivePlayer() == game.getPlayers().size() - 1) {
+        hitButton.setEnabled(false);
+        dealButton.setEnabled(false);
+        stickButton.setEnabled(false);
+        playAgainButton.setEnabled(true);
+        playerCardPanels.get(game.getActivePlayer()).setBackground(INACTIVE_PLAYER_COLOUR);
+        dealersTurn();
+      }
+      else {
+        playerCardPanels.get(game.getActivePlayer()).setBackground(INACTIVE_PLAYER_COLOUR);
+        game.setActivePlayer(game.getActivePlayer() + 1);
+        playerCardPanels.get(game.getActivePlayer()).setBackground(ACTIVE_PLAYER_COLOUR);
+      }
+      
     }
-
-    playerLabel.setText("Player:   " + game.getPlayers().get(0).getCardTotal());
   }
 
   /**
    * Sets the player's hand to stick and switches to the dealer.
    */
   public void stick() {
-    game.getPlayers().get(0).getHands().get(0).setSticking(true);
-    dealersTurn();
+    game.getPlayers().get(game.getActivePlayer()).getHands().get(0).setSticking(true);
+  
+    if (game.getActivePlayer() == game.getPlayers().size() - 1) {
+      playerCardPanels.get(game.getActivePlayer()).setBackground(INACTIVE_PLAYER_COLOUR);
+      dealersTurn();
+    }
+    else {
+      playerCardPanels.get(game.getActivePlayer()).setBackground(INACTIVE_PLAYER_COLOUR);
+      game.setActivePlayer(game.getActivePlayer() + 1);
+      playerCardPanels.get(game.getActivePlayer()).setBackground(ACTIVE_PLAYER_COLOUR);
+    }
   }
 
   /**
    * Double down on the player's bet.
    */
   public void doubleDown() {
-    if (game.getPlayers().get(0).getPlayerBank() < game.getPlayers().get(0).getHands().get(0).getBet()) {
+    int activePlayerIndex = game.getActivePlayer();
+    BlackjackPlayer activePlayer = game.getPlayers().get(activePlayerIndex);
+    
+    if (activePlayer.getPlayerBank() < activePlayer.getHands().get(0).getBet()) {
       JOptionPane.showMessageDialog(null, "You don't have sufficient funds to double down.");
       return;
     }
 
-    doubleDownButton.setEnabled(false);
-    game.getPlayers().get(0).doubleDown(game.getPlayers().get(0).getHands().get(0));
-    updateBankLabel();
+    activePlayer.doubleDown(activePlayer.getHands().get(0));
+    updateBankLabels();
     hit();
     stick();
+  
+    playerCardPanels.get(activePlayerIndex).setBackground(INACTIVE_PLAYER_COLOUR);
+    
+    if (game.getActivePlayer() == game.getPlayers().size() - 1) {
+      doubleDownButton.setEnabled(false);
+    }
+    else {
+      game.setActivePlayer(activePlayerIndex + 1);
+    }
+  
+    playerCardPanels.get(game.getActivePlayer()).setBackground(ACTIVE_PLAYER_COLOUR);
   }
 
   /**
    * Captures user input for placing a bet.
    */
-  public void placeBet() {
+  public void placeBet(BlackjackPlayer pPlayer) {
     boolean isValidChoice = false;
-
+  
     while (!isValidChoice) {
-      String userInput = JOptionPane.showInputDialog("How much do you want to bet? Press \"M\" for minimum bet.");
-
+      String userInput = JOptionPane.showInputDialog(pPlayer.getUserName() + ", how much do you want to bet? Press \"M\" for minimum bet.");
+  
       if (userInput == null) {
         System.exit(1);
       }
-
+  
       if (userInput.equalsIgnoreCase("M") || userInput.isEmpty()) {
-        game.getPlayers().get(0).getHands().get(0).setBet(Blackjack.sTableMinimumBet);
-        game.getPlayers().get(0).setPlayerBank(game.getPlayers().get(0).getPlayerBank() - Blackjack.sTableMinimumBet);
-        updateBankLabel();
+        pPlayer.getHands().get(0).setBet(Blackjack.sTableMinimumBet);
+        pPlayer.setPlayerBank(pPlayer.getPlayerBank() - Blackjack.sTableMinimumBet);
+        updateBankLabels();
         isValidChoice = true;
       }
       else {
         double bet = 0.0d;
-
+    
         try {
           bet = Double.valueOf(userInput);
-
-          if (bet > game.getPlayers().get(0).getPlayerBank()) {
-            JOptionPane.showMessageDialog(null, "You have entered an amount greater than you have in the bank.  "
-              + "Y'all ain't no High Rolla!!");
+      
+          if (bet > pPlayer.getPlayerBank()) {
+            JOptionPane.showMessageDialog(null, "You have entered an amount greater than you have in the bank.  " + "Y'all ain't no High Rolla!!");
             continue;
           }
         }
@@ -371,10 +438,10 @@ public class BlackjackGUI {
           JOptionPane.showMessageDialog(null, "Enter \"M\" or a numerical value for minimum bet.");
           continue;
         }
-
-        game.getPlayers().get(0).getHands().get(0).setBet(Double.parseDouble(userInput));
-        game.getPlayers().get(0).setPlayerBank(game.getPlayers().get(0).getPlayerBank() - bet);
-        updateBankLabel();
+    
+        pPlayer.getHands().get(0).setBet(Double.parseDouble(userInput));
+        pPlayer.setPlayerBank(game.getPlayers().get(0).getPlayerBank() - bet);
+        updateBankLabels();
         isValidChoice = true;
       }
     }
@@ -385,29 +452,35 @@ public class BlackjackGUI {
    */
   public void playAgain() {
     dealerLabel.setText("Dealer: ");
-    playerLabel.setText("Player: ");
-    statusTextBox.setText("");
-
     game.getDealer().getHands().clear();
-    game.getPlayers().get(0).getHands().clear();
-
-    dealerCardPanel.removeAll();
+  
     playerCardPanel.removeAll();
-
+    
+    for (int i = 0; i < game.getPlayers().size(); i++) {
+      playerLabels.get(i).setText(" ");
+      game.getPlayers().get(i).getHands().clear();
+      playerCardPanels.get(i).removeAll();
+      playerCardPanels.get(i).add(playerLabels.get(i));
+      playerCardPanel.add(playerCardPanels.get(i));
+    }
+    
+    dealerCardPanel.removeAll();
+    game.setActivePlayer(0);
+    
     hitButton.setEnabled(false);
     stickButton.setEnabled(false);
     playAgainButton.setEnabled(false);
     doubleDownButton.setEnabled(false);
     dealButton.setEnabled(true);
-    statusTextBox.setVisible(false);
 
-    if (game.getPlayers().get(0).getPlayerBank() < Blackjack.sTableMinimumBet) {
-      JOptionPane.showMessageDialog(null, "You don't have sufficient funds in your bank. Game finished!");
-      System.exit(1);
-    }
-    else {
+    // TODO: Maybe remove player if they have insufficient funds?
+    //if (game.getPlayers().get(0).getPlayerBank() < Blackjack.sTableMinimumBet) {
+    //  JOptionPane.showMessageDialog(null, "You don't have sufficient funds in your bank. Game finished!");
+    //  System.exit(1);
+    //}
+    //else {
       deal();
-    }
+    //}
   }
 
   /**
@@ -430,7 +503,7 @@ public class BlackjackGUI {
       dealerCardPanel.add(dealerHitCardImage);
     }
 
-    playerLabel.setText("Player: " + game.getPlayers().get(0).getHands().get(0));
+    playerLabels.get(0).setText(game.getPlayers().get(0).getUserName() + ": " + game.getPlayers().get(0).getHands().get(0));
 
     hitButton.setEnabled(false);
     stickButton.setEnabled(false);
@@ -463,7 +536,11 @@ public class BlackjackGUI {
     }
 
     dealerLabel.setText("Dealer: " + game.getDealer().getCardTotal());
-    playerLabel.setText("Player: " + game.getPlayers().get(0).getCardTotal());
+    
+    for (int i = 0; i < game.getPlayers().size(); i++) {
+      playerLabels.get(i).setText(Integer.toString(game.getPlayers().get(i).getCardTotal()));
+    }
+    
     determineGameOutcome();
   }
 
@@ -477,18 +554,27 @@ public class BlackjackGUI {
     stickButton.setEnabled(false);
     playAgainButton.setEnabled(true);
     doubleDownButton.setEnabled(false);
-    statusTextBox.setVisible(true);
 
-    statusTextBox.setText(game.determineOutcome());
-
-    updateBankLabel();
+    StringBuilder sb = new StringBuilder();
+    List<String> outcome = game.determineOutcome();
+    
+    for (int i = 0; i < outcome.size(); i++) {
+      sb.append(outcome.get(i));
+      sb.append("\n");
+    }
+    
+    JOptionPane.showMessageDialog(null, sb.toString());
+    updateBankLabels();
   }
 
   /**
    * Convenience method for updating the player's bank status.
    */
-  private void updateBankLabel() {
-    playerBankLabel.setText("Bank:  " + FORMATTER.format(game.getPlayers().get(0).getPlayerBank()));
+  private void updateBankLabels() {
+    for (int i = 0; i < game.getPlayers().size(); i++) {
+      playerBankLabels.get(i).setText(game.getPlayers().get(i).getUserName()
+        + " Bank:  " + FORMATTER.format(game.getPlayers().get(i).getPlayerBank()));
+    }
   }
   
   /**
@@ -552,8 +638,11 @@ public class BlackjackGUI {
   private void createAndShowGUI() {
     JFrame frame = new JFrame(GAME_TITLE);
     frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-    frame.getContentPane().setBackground(tableColour);
-    frame.setPreferredSize(new Dimension(800, 450));
+    frame.getContentPane().setBackground(TABLE_COLOUR);
+    
+    int percentIncrease = game.getPlayers().size() * 20;
+    
+    frame.setPreferredSize(new Dimension((800 * percentIncrease / 100) + 800, 450));
 
     addComponentsToPane(frame.getContentPane());
     

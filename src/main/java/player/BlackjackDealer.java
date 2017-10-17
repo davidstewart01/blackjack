@@ -86,15 +86,18 @@ public class BlackjackDealer extends BlackjackPlayer {
       pShoe.clear();
       pShoe.addAll(cobbleShoe());
     }
-
-    // TODO: deal multiple players.
-    pPlayers.get(0).getHands().add(new Hand());
+  
+    // Deal dealer cards.
     this.getHands().add(new Hand());
-
-    pPlayers.get(0).getHands().get(0).add(pShoe.removeLast());
     this.getHands().get(0).add(pShoe.removeLast());
-    pPlayers.get(0).getHands().get(0).add(pShoe.removeLast());
     this.getHands().get(0).add(pShoe.removeLast());
+    
+    // Deal player cards.
+    for (int i = 0; i < pPlayers.size(); i++) {
+      pPlayers.get(i).getHands().add(new Hand());
+      pPlayers.get(i).getHands().get(0).add(pShoe.removeLast());
+      pPlayers.get(i).getHands().get(0).add(pShoe.removeLast());
+    }
   }
 
   /**
