@@ -491,7 +491,7 @@ public class BlackjackGUI {
     dealerCardPanel.add(dealerLabel);
     dealerLabel.setText(dealerLabel.getText() + ": " + game.getDealer().getCardTotal());
 
-    //iterate through cards and re-display
+    // Iterate through cards and re-display.
     Card dealerHitCard = null;
     Iterator<Card> scan = (game.getDealer().getHands().get(0).iterator());
   
@@ -503,15 +503,26 @@ public class BlackjackGUI {
       dealerCardPanel.add(dealerHitCardImage);
     }
 
-    playerLabels.get(0).setText(game.getPlayers().get(0).getUserName() + ": " + game.getPlayers().get(0).getHands().get(0));
-
     hitButton.setEnabled(false);
     stickButton.setEnabled(false);
-
     playAgainButton.setEnabled(true);
     dealerCardPanel.repaint();
 
-    boolean isGameFinished = game.getPlayers().get(0).getHands().get(0).isBust();
+    boolean allPlayersBust = true;
+    boolean allPlayersHave21 = true;
+
+    for (int i = 0; i < game.getPlayers().size(); i++) {
+      if (!game.getPlayers().get(i).getHands().get(0).isBust()) {
+        allPlayersBust = false;
+      }
+
+      if (game.getPlayers().get(i).getCardTotal() != 21) {
+        allPlayersHave21 = false;
+      }
+    }
+
+    // The dealer doesn't need to take any more cards if all players are bust or have 21.
+    boolean isGameFinished = allPlayersBust || allPlayersHave21;
 
     while(!isGameFinished) {
       if (!game.getDealer().getHands().get(0).isSticking() && !game.getDealer().getHands().get(0).isBust()) {
@@ -562,7 +573,7 @@ public class BlackjackGUI {
       sb.append(outcome.get(i));
       sb.append("\n");
     }
-    
+
     JOptionPane.showMessageDialog(null, sb.toString());
     updateBankLabels();
   }
