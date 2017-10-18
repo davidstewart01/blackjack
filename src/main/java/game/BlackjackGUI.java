@@ -252,8 +252,6 @@ public class BlackjackGUI {
       playerLabels.get(i).setText(Integer.toString(game.getPlayers().get(i).getHands().get(0).getCardTotal()));
     }
   
-    mFirstGame = false;
-    
     for (int i = 0; i < game.getPlayers().size(); i++) {
       JLabel playerXBankLabel = new JLabel();
       playerBankLabels.add(playerXBankLabel);
@@ -444,6 +442,8 @@ public class BlackjackGUI {
    * Reset the GUI for a new game. This doesn't reset the bank.
    */
   public void playAgain() {
+    mFirstGame = false;
+
     dealerLabel.setText("Dealer: ");
     game.getDealer().getHands().clear();
   

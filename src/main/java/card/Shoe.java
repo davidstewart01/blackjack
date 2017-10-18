@@ -103,7 +103,6 @@ public class Shoe extends LinkedList<Card> {
     pDecks.forEach(this::addAll);
     setNumberOfDecksInShoe(pDecks.size());
 
-    System.out.println(getNumberOfDecksInShoe());
     if (pShuffle) {
       shuffle();
     }
