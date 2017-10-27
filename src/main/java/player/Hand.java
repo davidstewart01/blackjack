@@ -12,13 +12,6 @@ import java.util.LinkedList;
 public class Hand extends LinkedList<Card> {
 
   //-----------------------------------------------------------------
-  // MEMBERS
-  //-----------------------------------------------------------------
-
-  /** Flag that determines whether or not the hand is splittable. */
-  private boolean isSplittable = false;
-
-  //-----------------------------------------------------------------
   // PROPERTIES
   //-----------------------------------------------------------------
 
@@ -92,7 +85,7 @@ public class Hand extends LinkedList<Card> {
 
   /**
    * @return
-   *   Whether or not the player has made a Double Down play.
+   *   Flag that indicates if the player has made a double down play.
    */
   public boolean hasDoubledDown(){
     return mHasDoubledDown;
@@ -100,6 +93,7 @@ public class Hand extends LinkedList<Card> {
 
   /**
    * @param pHasDoubledDown
+   *   Flag that indicates if the player has made a double down play.
    */
   public void setHasDoubledDown(boolean pHasDoubledDown) {
     mHasDoubledDown = pHasDoubledDown;
@@ -143,32 +137,34 @@ public class Hand extends LinkedList<Card> {
 
   /**
    * @return
-   *   Whether or not the player can split the current hand
+   *   Whether or not the player can split the current hand.
    */
-  public boolean canSplitHand(){
-    if((getNumberOfCardsInHand() == 2) && (get(0).getValue() == get(1).getValue())){
-      isSplittable = true;
+  public boolean canSplitHand() {
+    if (getNumberOfCardsInHand() == 2 && get(0).getValue() == get(1).getValue()) {
+      return true;
     }
-    return isSplittable;
+    else {
+      return false;
+    }
   }
 
   /**
-   * Adds a Card to the current players Hand.
+   * Adds a card to the current players hand.
    *
    * @param pCard
-   *   the Card to add to the Hand
+   *   The card to add to the hand.
    */
-  public void addCard(Card pCard){
+  public void addCard(Card pCard) {
     add(pCard);
   }
 
   /**
-   * Returns the number of Cards in the Hand.
+   * Returns the number of cards in the hand.
    *
    * @return
-   *   The number of Cards in the current Hand.
+   *   The number of cards in the current hand.
    */
-  public int getNumberOfCardsInHand(){
+  public int getNumberOfCardsInHand() {
     return size();
   }
 

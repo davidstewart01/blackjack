@@ -154,43 +154,11 @@ public class BlackjackPlayer extends Player {
    * when it has only 2 cards.
    */
   public void doubleDown(Hand pHand){
-    if(!pHand.hasDoubledDown() && pHand.getNumberOfCardsInHand() == 2){
+    if (!pHand.hasDoubledDown() && pHand.getNumberOfCardsInHand() == 2) {
       pHand.setHasDoubledDown(true);
       setPlayerBank(getPlayerBank() - pHand.getBet());
       pHand.setBet(pHand.getBet() * 2);
     }
   }
-
-  /**
-   * @return
-   *   The running total value of all player 's cards in hand.
-   */
-  /*public int getCardTotal() {
-    int total = 0;
-    int numAces = 0;
-
-    //TODO - tidy up for the hand being played, not just the first one
-    for (Card card : getHands().get(0)) {
-      if (card.getRank().getValue() == 1) {
-        ++numAces;
-        continue;
-      }
-
-      total += card.getRank().getValue();
-    }
-
-    // Switch ace values if necessary.
-    if (numAces > 0) {
-      
-      // Because only one ace in a hand can have a value of 11, check that one ace with a
-      // value of 11 plus the other aces with a value of one doesn't exceed 21. If it does
-      // exceed 21, all aces in the hand need to have a value of one.
-      
-      int acesTotal = 11 + (numAces - 1);
-      total += ((acesTotal + total) > 21) ? numAces : acesTotal;
-    }
-
-    return total;
-  }*/
 
 }

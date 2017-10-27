@@ -77,6 +77,9 @@ public class BlackjackGUI {
 
   /** Button that performs a double down for the player. */
   private JButton doubleDownButton = new JButton();
+  
+  /** Button that allows a player to split. */
+  private JButton splitButton = new JButton();
 
   /** Button that resets the game. */
   private JButton playAgainButton = new JButton();
@@ -89,6 +92,7 @@ public class BlackjackGUI {
   private static final String STICK_ACTION_COMMAND = "STICK";
   private static final String DOUBLE_DOWN_ACTION_COMMAND = "DOUBLE_DOWN";
   private static final String HIT_ACTION_COMMAND = "HIT";
+  private static final String SPLIT_ACTION_COMMAND = "SPLIT";
   private static final String PLAY_AGAIN_ACTION_COMMAND = "PLAY_AGAIN";
 
   //-------------------------------------------------
@@ -145,6 +149,7 @@ public class BlackjackGUI {
     topPanel.add(hitButton);
     topPanel.add(stickButton);
     topPanel.add(doubleDownButton);
+    topPanel.add(splitButton);
     topPanel.add(playAgainButton);
     topPanel.add(shoeSizeDisplay);
     topPanel.setBackground(TABLE_COLOUR);
@@ -273,6 +278,10 @@ public class BlackjackGUI {
     dealButton.setEnabled(false);
     doubleDownButton.setEnabled(true);
 
+    if (game.getPlayers().get(0).getHands().get(0).canSplitHand()) {
+      splitButton.setEnabled(true);
+    }
+    
     // TODO: If dealer has blackjack here, he wins.
     // Player has blackjack.
     if (game.getPlayers().get(game.getActivePlayer()).getHands().get(0).getCardTotal() == 21) {
@@ -392,6 +401,14 @@ public class BlackjackGUI {
     if (game.getActivePlayer() != game.getPlayers().size() - 1){
       game.setActivePlayer(activePlayerIndex + 1);
     }
+  }
+  
+  /**
+   * Perform a split on the player's cards.
+   */
+  public void split() {
+    // TODO: Implement split functionality...
+    JOptionPane.showMessageDialog(null, "Feature coming soon...");
   }
 
   /**
@@ -603,6 +620,11 @@ public class BlackjackGUI {
     doubleDownButton.addActionListener(new GameButtonListener());
     doubleDownButton.setActionCommand(DOUBLE_DOWN_ACTION_COMMAND);
     doubleDownButton.setEnabled(false);
+  
+    splitButton.setText("Split");
+    splitButton.addActionListener(new GameButtonListener());
+    splitButton.setActionCommand(SPLIT_ACTION_COMMAND);
+    splitButton.setEnabled(false);
     
     playAgainButton.setText("Play Again");
     playAgainButton.addActionListener(new GameButtonListener());
@@ -625,6 +647,9 @@ public class BlackjackGUI {
           break;
         case STICK_ACTION_COMMAND:
           stick();
+          break;
+        case SPLIT_ACTION_COMMAND:
+          split();
           break;
         case DOUBLE_DOWN_ACTION_COMMAND:
           doubleDown();
